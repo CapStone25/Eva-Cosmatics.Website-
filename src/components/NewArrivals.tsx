@@ -57,10 +57,16 @@ const NewArrivals = () => {
 
         {/* Products Grid */}
         <div className="relative">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product, index) => (
-              <ProductCard key={index} {...product} />
-            ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {products.map((product, index) => (
+            <div 
+              key={index} 
+              className="animate-fade-in-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <ProductCard {...product} />
+            </div>
+          ))}
           </div>
 
           {/* Carousel Controls */}
