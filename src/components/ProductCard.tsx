@@ -21,7 +21,7 @@ const ProductCard = ({
   featured = false 
 }: ProductCardProps) => {
   return (
-    <Card className="group relative overflow-hidden border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-[0_8px_32px_hsl(340_82%_67%/0.25)] hover:-translate-y-2 animate-fade-in-up">
+    <Card className="group relative overflow-hidden border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-card">
       <CardContent className="p-0">
         {/* Discount Badge */}
         {discount && (
@@ -45,7 +45,7 @@ const ProductCard = ({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-4 right-4 z-10 bg-background/90 hover:bg-primary hover:text-primary-foreground backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+          className="absolute top-4 right-4 z-10 bg-background/80 hover:bg-background opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         >
           <Heart className="h-4 w-4" />
         </Button>
@@ -55,14 +55,13 @@ const ProductCard = ({
           <img
             src={image}
             alt={name}
-            className="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition-all duration-700"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
 
         {/* Product Info */}
         <div className="p-4 space-y-2">
-          <h3 className="font-medium text-foreground group-hover:text-primary transition-all duration-300 group-hover:translate-x-1">
+          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
             {name}
           </h3>
           
