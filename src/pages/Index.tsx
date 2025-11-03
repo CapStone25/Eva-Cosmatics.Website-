@@ -1,14 +1,14 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import { ShopifyProducts } from "@/components/ShopifyProducts";
+import NewArrivals from "@/components/NewArrivals";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background scroll-smooth">
+    <div className="min-h-screen bg-background">
       <Header />
       <main>
         <Hero />
-        <ShopifyProducts />
+        <NewArrivals />
       </main>
     </div>
   );

@@ -1,7 +1,6 @@
-import { Search, User } from "lucide-react";
+import { Search, User, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoIcon from "@/assets/logo-icon.png";
-import { CartDrawer } from "@/components/CartDrawer";
 
 const Header = () => {
   const navItems = ["SHOP ALL", "BESTSELLERS", "COLLECTION", "ABOUT US", "BLOG"];
@@ -40,7 +39,10 @@ const Header = () => {
               <User className="h-5 w-5" />
               <span className="sr-only">Account</span>
             </Button>
-            <CartDrawer />
+            <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary">
+              <ShoppingBag className="h-5 w-5" />
+              <span className="sr-only">Cart</span>
+            </Button>
             <img src={logoIcon} alt="Eva Cosmetics" className="h-10 w-10 hidden md:block" />
           </div>
         </div>
