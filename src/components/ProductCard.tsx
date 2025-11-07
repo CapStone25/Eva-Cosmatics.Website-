@@ -10,6 +10,7 @@ interface ProductCardProps {
   reviews?: number;
   discount?: number;
   featured?: boolean;
+  price?: string;
 }
 
 const ProductCard = ({ 
@@ -18,7 +19,8 @@ const ProductCard = ({
   rating = 0, 
   reviews = 0, 
   discount,
-  featured = false 
+  featured = false,
+  price
 }: ProductCardProps) => {
   return (
     <Card className="group relative overflow-hidden border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-card">
@@ -61,7 +63,7 @@ const ProductCard = ({
 
         {/* Product Info */}
         <div className="p-4 space-y-2">
-          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
+          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 min-h-[3rem]">
             {name}
           </h3>
           
@@ -83,6 +85,21 @@ const ProductCard = ({
               </span>
             </div>
           )}
+
+          {/* Price */}
+          {price && (
+            <div className="pt-2">
+              <span className="text-lg font-semibold text-foreground">{price}</span>
+            </div>
+          )}
+
+          {/* Add to Bag Button */}
+          <Button 
+            variant="outline" 
+            className="w-full mt-3 border-primary/30 hover:bg-primary hover:text-primary-foreground transition-all hover:scale-105"
+          >
+            Add To Bag
+          </Button>
         </div>
       </CardContent>
     </Card>
