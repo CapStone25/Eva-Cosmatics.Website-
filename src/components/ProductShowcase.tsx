@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import showcase1 from "@/assets/showcase-1.jpg";
+import showcase2 from "@/assets/showcase-2.jpg";
 
 interface ShowcaseItem {
   title: string;
@@ -15,14 +17,14 @@ const ProductShowcase = () => {
       title: "Blossom Glow Kit",
       description: "Reveal your skin's natural glow with our Lotus Glow Kit. Nourishing body and face creams with lotus extract provide deep hydration and rejuvenation. Suitable for all skin types. Vegan, cruelty-free, eco-friendly.",
       tags: ["GreatGift", "AntiAging", "GreatGift", "Ingredients", "Ingredients"],
-      imageUrl: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80",
+      imageUrl: showcase1,
       imagePosition: "right",
     },
     {
       title: "Floral Essence Masks Sets",
       description: "Indulge in the beauty of nature with our Floral Essence Masks set. Each mask features a unique blend of flower extracts to hydrate and nourish your skin. Experience the essence of flowers in your skincare routine.",
       tags: ["GreatGift", "AntiAging", "GreatGift", "Ingredients", "Ingredients"],
-      imageUrl: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&q=80",
+      imageUrl: showcase2,
       imagePosition: "left",
     },
   ];

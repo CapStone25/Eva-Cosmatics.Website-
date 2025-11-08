@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import skinQuizImage from "@/assets/skin-quiz.jpg";
 
 const BlogSection = () => {
   const blogPosts = [
@@ -79,7 +80,7 @@ const BlogSection = () => {
         <div className="grid md:grid-cols-2 gap-8 items-center bg-gradient-to-r from-secondary/40 to-secondary/20 rounded-3xl p-8 md:p-12 mt-12 animate-fade-in" style={{ animationDelay: '0.3s' }}>
           <div className="relative h-64 md:h-80">
             <img
-              src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800&auto=format&fit=crop"
+              src={skinQuizImage}
               alt="Skin Quiz"
               className="w-full h-full object-cover rounded-2xl"
             />

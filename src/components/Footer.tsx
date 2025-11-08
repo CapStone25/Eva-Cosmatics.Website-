@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
           {/* Brand */}
           <div className="md:col-span-1">
-            <h3 className="text-xl font-bold mb-4 text-primary">Bloom Beauty</h3>
+            <h3 className="text-xl font-bold mb-4 text-primary">Eva Cosmetics</h3>
             <p className="text-sm text-white/80 mb-3">
               Discover nature's beauty with our natural care products
             </p>
@@ -129,7 +129,7 @@ const Footer = () => {
             </div>
 
             <div className="flex gap-6 text-sm text-white/60">
-              <span>© 2023 Bloom Beauty</span>
+              <span>© 2023 Eva Cosmetics</span>
               <a href="#" className="hover:text-primary transition-colors">
                 Privacy Policy
               </a>
