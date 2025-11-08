@@ -3,6 +3,9 @@ import Hero from "@/components/Hero";
 import NewArrivals from "@/components/NewArrivals";
 import BestSellers from "@/components/BestSellers";
 import ProductShowcase from "@/components/ProductShowcase";
+import BlogSection from "@/components/BlogSection";
+import InstagramGallery from "@/components/InstagramGallery";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -13,7 +16,10 @@ const Index = () => {
         <NewArrivals />
         <BestSellers />
         <ProductShowcase />
+        <BlogSection />
+        <InstagramGallery />
       </main>
+      <Footer />
     </div>
   );
 };

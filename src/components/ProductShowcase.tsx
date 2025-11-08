@@ -28,7 +28,7 @@ const ProductShowcase = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden">
+    <section className="py-12 md:py-16 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden">
       {/* Decorative gradient orbs */}
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />

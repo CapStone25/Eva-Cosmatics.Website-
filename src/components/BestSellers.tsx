@@ -43,7 +43,7 @@ const BestSellers = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-b from-background via-primary/5 to-background relative overflow-hidden">
+    <section className="py-12 md:py-16 bg-gradient-to-b from-background via-primary/5 to-background relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-10 right-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
       <div className="absolute bottom-10 left-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
