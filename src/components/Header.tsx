@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +18,14 @@ import logoIcon from "@/assets/logo-icon.png";
 import bagIcon from "@/assets/bag-icon.png";
 
 const Header = () => {
-  const navItems = ["SHOP ALL", "BESTSELLERS", "COLLECTION", "ABOUT US", "BLOG"];
+  const navigate = useNavigate();
+  const navItems = [
+    { label: "SHOP ALL", path: "/best-sellers" },
+    { label: "BESTSELLERS", path: "/best-sellers" },
+    { label: "COLLECTION", path: "/" },
+    { label: "ABOUT US", path: "/" },
+    { label: "BLOG", path: "/" },
+  ];
   const [cartCount] = useState(3); // Mock cart count
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
@@ -26,21 +34,22 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <h1 className="text-2xl font-bold">
               <span className="text-primary">Eva</span>
               <span className="text-foreground"> Cosmetics</span>
             </h1>
-          </div>
+          </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <button
-                key={item}
+                key={item.label}
+                onClick={() => navigate(item.path)}
                 className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
               >
-                {item}
+                {item.label}
               </button>
             ))}
           </nav>
