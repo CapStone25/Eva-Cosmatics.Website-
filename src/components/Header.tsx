@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { User, ShoppingBag } from "lucide-react";
+import { Search, User, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -56,10 +56,13 @@ const Header = () => {
 
           {/* Icons */}
           <div className="flex items-center gap-4">
+            {/* Search Icon */}
             <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary">
-              <ShoppingBag className="h-5 w-5" />
-              <span className="sr-only">Bag</span>
+              <Search className="h-5 w-5" />
+              <span className="sr-only">Search</span>
             </Button>
+            
+            {/* Account/User Icon with Login Dialog */}
             
             {/* Login Dialog */}
             <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
@@ -113,6 +116,12 @@ const Header = () => {
                 </Tabs>
               </DialogContent>
             </Dialog>
+
+            {/* Cart/Shopping Bag Icon */}
+            <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary">
+              <ShoppingBag className="h-5 w-5" />
+              <span className="sr-only">Cart</span>
+            </Button>
 
             {/* Robot Icon with Badge */}
             <Button variant="ghost" size="icon" className="hover:scale-110 transition-transform duration-300 relative">
