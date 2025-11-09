@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, User } from "lucide-react";
+import { User, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import logoIcon from "@/assets/logo-icon.png";
-import bagIcon from "@/assets/bag-icon.png";
+import robotIcon from "@/assets/robot-icon.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -57,8 +57,8 @@ const Header = () => {
           {/* Icons */}
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary">
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
+              <ShoppingBag className="h-5 w-5" />
+              <span className="sr-only">Bag</span>
             </Button>
             
             {/* Login Dialog */}
@@ -114,15 +114,15 @@ const Header = () => {
               </DialogContent>
             </Dialog>
 
-            {/* Cart with Badge */}
+            {/* Robot Icon with Badge */}
             <Button variant="ghost" size="icon" className="hover:scale-110 transition-transform duration-300 relative">
-              <img src={bagIcon} alt="Shopping Bag" className="h-6 w-6" />
+              <img src={robotIcon} alt="Robot Assistant" className="h-6 w-6" />
               {cartCount > 0 && (
                 <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs animate-pulse">
                   {cartCount}
                 </Badge>
               )}
-              <span className="sr-only">Cart</span>
+              <span className="sr-only">Assistant</span>
             </Button>
             <img src={logoIcon} alt="Eva Cosmetics" className="h-10 w-10 hidden md:block" />
           </div>
