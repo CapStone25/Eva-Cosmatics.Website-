@@ -9,6 +9,7 @@ import productLotion from "@/assets/product-lotion.png";
 const BestSellers = () => {
   const products = [
     {
+      id: "static-1",
       image: productSerum,
       name: "All-Around Safe Block Essence Sun SPF45+",
       rating: 5,
@@ -17,6 +18,7 @@ const BestSellers = () => {
       discount: 14,
     },
     {
+      id: "static-2",
       image: productRecipe,
       name: "Super Aqua Snail Cream",
       rating: 5,
@@ -25,6 +27,7 @@ const BestSellers = () => {
       featured: true,
     },
     {
+      id: "static-3",
       image: productConditioner,
       name: "Clarifying Emulsion",
       rating: 5,
@@ -33,6 +36,7 @@ const BestSellers = () => {
       featured: true,
     },
     {
+      id: "static-4",
       image: productLotion,
       name: "Dewy Glow Jelly Cream",
       rating: 5,
@@ -70,14 +74,14 @@ const BestSellers = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {products.map((product, index) => (
               <div 
-                key={index}
+                key={product.id}
                 className="opacity-0 animate-scale-in"
                 style={{ 
                   animationDelay: `${index * 0.15}s`,
                   animationFillMode: 'forwards'
                 }}
               >
-                <ProductCard {...product} />
+                <ProductCard id={product.id} {...product} />
               </div>
             ))}
           </div>
