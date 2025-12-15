@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
 import productSerum from "@/assets/product-serum.png";
 import productRecipe from "@/assets/product-recipe.png";
 import productConditioner from "@/assets/product-conditioner.png";
@@ -14,10 +15,44 @@ import product2 from "@/assets/product-2.jpg";
 import product3 from "@/assets/product-3.jpg";
 import product4 from "@/assets/product-4.jpg";
 
+const productImages: Record<string, string> = {
+  "product-serum.png": productSerum,
+  "product-recipe.png": productRecipe,
+  "product-conditioner.png": productConditioner,
+  "product-lotion.png": productLotion,
+  "product-1.jpg": product1,
+  "product-2.jpg": product2,
+  "product-3.jpg": product3,
+  "product-4.jpg": product4,
+};
+
+interface DBProduct {
+  id: string;
+  name: string;
+  price: number;
+  image: string | null;
+  skin_type: string | null;
+}
+
 const BestSellers = () => {
   const [selectedSkinTypes, setSelectedSkinTypes] = useState<string[]>([]);
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("relevance");
+  const [dbProducts, setDbProducts] = useState<DBProduct[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data } = await supabase
+        .from("products")
+        .select("id, name, price, image, skin_type")
+        .order("created_at", { ascending: false });
+      
+      if (data) {
+        setDbProducts(data);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const categories = [
     "Double-Cleanse",
@@ -26,7 +61,7 @@ const BestSellers = () => {
     "Water Cleansers",
   ];
 
-  const allProducts = [
+  const staticProducts = [
     {
       id: "static-1",
       image: productSerum,
@@ -164,6 +199,21 @@ const BestSellers = () => {
     );
   };
 
+  // Combine database products with static products
+  const allProducts = [
+    ...dbProducts.map(p => ({
+      id: p.id,
+      image: p.image && productImages[p.image] ? productImages[p.image] : productSerum,
+      name: p.name,
+      rating: 5,
+      reviews: 0,
+      price: `${p.price}$`,
+      skinType: p.skin_type || "All",
+      priceValue: p.price,
+    })),
+    ...staticProducts,
+  ];
+
   const filteredProducts = useMemo(() => {
     let filtered = [...allProducts];
 
@@ -207,7 +257,7 @@ const BestSellers = () => {
     }
 
     return filtered;
-  }, [selectedSkinTypes, selectedPriceRanges, sortBy]);
+  }, [selectedSkinTypes, selectedPriceRanges, sortBy, dbProducts]);
 
   return (
     <div className="min-h-screen bg-background">
