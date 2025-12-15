@@ -9,30 +9,38 @@ import productLotion from "@/assets/product-lotion.png";
 const NewArrivals = () => {
   const products = [
     {
+      id: "static-1",
       image: productSerum,
       name: "Anti-Ageing Hyaluronic Acid Face Serum",
       rating: 5,
       reviews: 0,
+      price: "50$",
     },
     {
+      id: "static-2",
       image: productRecipe,
       name: "Aromatica Recipe Shampoo",
       rating: 5,
       reviews: 0,
+      price: "50$",
       discount: 15,
     },
     {
+      id: "static-3",
       image: productConditioner,
       name: "Advanced Care Clinic Conditioner",
       rating: 5,
       reviews: 0,
+      price: "50$",
       featured: true,
     },
     {
+      id: "static-4",
       image: productLotion,
       name: "Aromatica Recipe Body Lotion",
       rating: 5,
       reviews: 0,
+      price: "50$",
       featured: true,
     },
   ];
@@ -65,14 +73,14 @@ const NewArrivals = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {products.map((product, index) => (
               <div 
-                key={index}
+                key={product.id}
                 className="opacity-0 animate-fade-in"
                 style={{ 
                   animationDelay: `${index * 0.15}s`,
                   animationFillMode: 'forwards'
                 }}
               >
-                <ProductCard {...product} />
+                <ProductCard id={product.id} {...product} />
               </div>
             ))}
           </div>

@@ -45,12 +45,21 @@ interface Order {
   created_at: string;
 }
 
+interface OrderItem {
+  id: string;
+  order_id: string;
+  product_name: string;
+  quantity: number;
+  price: number;
+}
+
 const Dashboard = () => {
   const { user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [orderItems, setOrderItems] = useState<Record<string, OrderItem[]>>({});
   const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [productForm, setProductForm] = useState({
@@ -94,6 +103,21 @@ const Dashboard = () => {
 
     if (data) {
       setOrders(data);
+      // Fetch order items for each order
+      for (const order of data) {
+        fetchOrderItems(order.id);
+      }
+    }
+  };
+
+  const fetchOrderItems = async (orderId: string) => {
+    const { data } = await supabase
+      .from("order_items")
+      .select("*")
+      .eq("order_id", orderId);
+
+    if (data) {
+      setOrderItems(prev => ({ ...prev, [orderId]: data }));
     }
   };
 
@@ -399,36 +423,53 @@ const Dashboard = () => {
                     {orders.map((order) => (
                       <div
                         key={order.id}
-                        className="flex items-center justify-between p-4 bg-muted rounded-xl"
+                        className="p-4 bg-muted rounded-xl space-y-4"
                       >
-                        <div>
-                          <p className="font-medium text-foreground">
-                            Order #{order.id.slice(0, 8)}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {new Date(order.created_at).toLocaleDateString()} • ${order.total.toFixed(2)}
-                          </p>
-                          {order.shipping_address && (
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {order.shipping_address}
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              Order #{order.id.slice(0, 8)}
                             </p>
-                          )}
+                            <p className="text-sm text-muted-foreground">
+                              {new Date(order.created_at).toLocaleDateString()} • ${order.total.toFixed(2)}
+                            </p>
+                            {order.shipping_address && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                📍 {order.shipping_address}
+                              </p>
+                            )}
+                          </div>
+                          <Select
+                            value={order.status}
+                            onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
+                          >
+                            <SelectTrigger className="w-32">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectItem value="processing">Processing</SelectItem>
+                              <SelectItem value="shipped">Shipped</SelectItem>
+                              <SelectItem value="completed">Completed</SelectItem>
+                              <SelectItem value="cancelled">Cancelled</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                        <Select
-                          value={order.status}
-                          onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
-                        >
-                          <SelectTrigger className="w-32">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="processing">Processing</SelectItem>
-                            <SelectItem value="shipped">Shipped</SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
-                            <SelectItem value="cancelled">Cancelled</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        
+                        {/* Order Items */}
+                        {orderItems[order.id] && orderItems[order.id].length > 0 && (
+                          <div className="border-t border-border pt-3 mt-3">
+                            <p className="text-sm font-medium mb-2">Order Items:</p>
+                            <div className="space-y-2">
+                              {orderItems[order.id].map((item) => (
+                                <div key={item.id} className="flex justify-between text-sm bg-background/50 p-2 rounded-lg">
+                                  <span>{item.product_name} x{item.quantity}</span>
+                                  <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
