@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 
@@ -29,10 +30,12 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toast } = useToast();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
     const priceNum = price ? parseFloat(price.replace('$', '')) : 50;
     addToCart({
       id: id || name,
@@ -46,11 +49,17 @@ const ProductCard = ({
     });
   };
 
+  const handleCardClick = () => {
+    const productId = id || `static-${name.toLowerCase().replace(/\s+/g, '-')}`;
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <Card 
-      className="group relative overflow-hidden border-0 bg-gradient-to-br from-card to-secondary/30 hover:shadow-hover transition-all duration-500 hover:-translate-y-2"
+      className="group relative overflow-hidden border-0 bg-gradient-to-br from-card to-secondary/30 hover:shadow-hover transition-all duration-500 hover:-translate-y-2 cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       <CardContent className="p-0">
         {/* Discount Badge */}
@@ -75,7 +84,10 @@ const ProductCard = ({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setIsLiked(!isLiked)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsLiked(!isLiked);
+          }}
           className={`absolute ${discount || featured ? 'top-14' : 'top-4'} right-4 z-10 bg-white/90 hover:bg-white backdrop-blur-sm transition-all duration-300 rounded-full shadow-lg ${
             isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
           }`}

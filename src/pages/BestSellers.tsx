@@ -28,6 +28,7 @@ const BestSellers = () => {
 
   const allProducts = [
     {
+      id: "static-1",
       image: productSerum,
       name: "All-Around Safe Block Essence Sun SPF45+",
       rating: 5,
@@ -37,6 +38,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-2",
       image: productRecipe,
       name: "Super Aqua Snail Cream",
       rating: 5,
@@ -46,6 +48,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-3",
       image: productConditioner,
       name: "Clarifying Emulsion",
       rating: 5,
@@ -55,15 +58,17 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-4",
       image: product1,
       name: "Dewy Glow Jelly Cream",
       rating: 5,
       reviews: 0,
-      price: "50$",
+      price: "26$",
       skinType: "Combination/Oily",
-      priceValue: 50,
+      priceValue: 26,
     },
     {
+      id: "static-5",
       image: product2,
       name: "Fermented Soybean Bio Cellulose Mask",
       rating: 5,
@@ -74,6 +79,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-6",
       image: product3,
       name: "Pore Clearing Clay Mask 2X",
       rating: 5,
@@ -83,6 +89,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-7",
       image: productLotion,
       name: "Matte Priming UV Shield Sunscreen SPF 37",
       rating: 5,
@@ -92,6 +99,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-8",
       image: product4,
       name: "Soft Finish Sun Milk SPF50+/PA+++",
       rating: 5,
@@ -102,6 +110,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-9",
       image: productSerum,
       name: "Skin Reinforcement Get Type Cream",
       rating: 5,
@@ -111,6 +120,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-10",
       image: product1,
       name: "Lychee Soda Bubble Cleanser",
       rating: 5,
@@ -121,6 +131,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-11",
       image: product2,
       name: "Rice Sheet Mask",
       rating: 5,
@@ -130,6 +141,7 @@ const BestSellers = () => {
       priceValue: 50,
     },
     {
+      id: "static-12",
       image: productConditioner,
       name: "Gentle Exfoliating Toner",
       rating: 5,
@@ -310,14 +322,14 @@ const BestSellers = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product, index) => (
                 <div
-                  key={index}
+                  key={product.id}
                   className="opacity-0 animate-scale-in"
                   style={{
                     animationDelay: `${index * 0.1}s`,
                     animationFillMode: "forwards",
                   }}
                 >
-                  <ProductCard {...product} />
+                  <ProductCard id={product.id} {...product} />
                 </div>
               ))}
             </div>
