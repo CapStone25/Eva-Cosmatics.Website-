@@ -104,7 +104,7 @@ const Header = () => {
               </h1>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden md:flex items-center gap-12">
               {navItems.map((item) => (
                 <button
                   key={item.label}
