@@ -1,49 +1,95 @@
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import productSerum from "@/assets/product-serum.png";
 import productRecipe from "@/assets/product-recipe.png";
 import productConditioner from "@/assets/product-conditioner.png";
 import productLotion from "@/assets/product-lotion.png";
 
+const productImages: Record<string, string> = {
+  "product-serum.png": productSerum,
+  "product-recipe.png": productRecipe,
+  "product-conditioner.png": productConditioner,
+  "product-lotion.png": productLotion,
+};
+
+const staticProducts = [
+  {
+    id: "static-1",
+    image: productSerum,
+    name: "Anti-Ageing Hyaluronic Acid Face Serum",
+    rating: 5,
+    reviews: 0,
+    price: "50$",
+  },
+  {
+    id: "static-2",
+    image: productRecipe,
+    name: "Aromatica Recipe Shampoo",
+    rating: 5,
+    reviews: 0,
+    price: "50$",
+    discount: 15,
+  },
+  {
+    id: "static-3",
+    image: productConditioner,
+    name: "Advanced Care Clinic Conditioner",
+    rating: 5,
+    reviews: 0,
+    price: "50$",
+    featured: true,
+  },
+  {
+    id: "static-4",
+    image: productLotion,
+    name: "Aromatica Recipe Body Lotion",
+    rating: 5,
+    reviews: 0,
+    price: "50$",
+    featured: true,
+  },
+];
+
+interface DBProduct {
+  id: string;
+  name: string;
+  price: number;
+  image: string | null;
+}
+
 const NewArrivals = () => {
-  const products = [
-    {
-      id: "static-1",
-      image: productSerum,
-      name: "Anti-Ageing Hyaluronic Acid Face Serum",
+  const [dbProducts, setDbProducts] = useState<DBProduct[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data } = await supabase
+        .from("products")
+        .select("id, name, price, image")
+        .order("created_at", { ascending: false })
+        .limit(4);
+      
+      if (data) {
+        setDbProducts(data);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // Combine database products with static products, prioritizing DB products
+  const allProducts = [
+    ...dbProducts.map(p => ({
+      id: p.id,
+      image: p.image && productImages[p.image] ? productImages[p.image] : productSerum,
+      name: p.name,
       rating: 5,
       reviews: 0,
-      price: "50$",
-    },
-    {
-      id: "static-2",
-      image: productRecipe,
-      name: "Aromatica Recipe Shampoo",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      discount: 15,
-    },
-    {
-      id: "static-3",
-      image: productConditioner,
-      name: "Advanced Care Clinic Conditioner",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      featured: true,
-    },
-    {
-      id: "static-4",
-      image: productLotion,
-      name: "Aromatica Recipe Body Lotion",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      featured: true,
-    },
-  ];
+      price: `${p.price}$`,
+    })),
+    ...staticProducts.slice(0, Math.max(0, 4 - dbProducts.length)),
+  ].slice(0, 4);
 
   return (
     <section className="py-12 md:py-16 bg-gradient-to-b from-background via-secondary/30 to-background relative overflow-hidden">
@@ -71,7 +117,7 @@ const NewArrivals = () => {
         {/* Products Grid */}
         <div className="relative">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {products.map((product, index) => (
+            {allProducts.map((product, index) => (
               <div 
                 key={product.id}
                 className="opacity-0 animate-fade-in"
