@@ -3,8 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
+  id?: string;
   image: string;
   name: string;
   rating?: number;
@@ -15,6 +18,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ 
+  id,
   image, 
   name, 
   rating = 0, 
@@ -25,6 +29,22 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToCart = () => {
+    const priceNum = price ? parseFloat(price.replace('$', '')) : 50;
+    addToCart({
+      id: id || name,
+      name,
+      price: priceNum,
+      image,
+    });
+    toast({
+      title: "Added to cart",
+      description: `${name} has been added to your bag`,
+    });
+  };
 
   return (
     <Card 
@@ -128,6 +148,7 @@ const ProductCard = ({
           {/* Add to Bag Button */}
           <Button 
             className="w-full mt-3 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 font-semibold rounded-xl group/btn"
+            onClick={handleAddToCart}
           >
             <ShoppingBag className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform" />
             Add To Bag
