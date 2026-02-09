@@ -3,25 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import productSerum from "@/assets/product-serum.png";
-import productRecipe from "@/assets/product-recipe.png";
-import productConditioner from "@/assets/product-conditioner.png";
-import productLotion from "@/assets/product-lotion.png";
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
-import product4 from "@/assets/product-4.jpg";
-
-const productImages: Record<string, string> = {
-  "product-serum.png": productSerum,
-  "product-recipe.png": productRecipe,
-  "product-conditioner.png": productConditioner,
-  "product-lotion.png": productLotion,
-  "product-1.jpg": product1,
-  "product-2.jpg": product2,
-  "product-3.jpg": product3,
-  "product-4.jpg": product4,
-};
+import { resolveProductImage } from "@/lib/productImages";
 
 interface DBProduct {
   id: string;
@@ -48,7 +30,7 @@ const NewArrivals = () => {
 
   const allProducts = products.map(p => ({
     id: p.id,
-    image: p.image && productImages[p.image] ? productImages[p.image] : productSerum,
+    image: resolveProductImage(p.image),
     name: p.name,
     rating: 5,
     reviews: 0,

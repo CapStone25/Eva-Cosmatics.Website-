@@ -14,15 +14,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
-import productSerum from "@/assets/product-serum.png";
-import productRecipe from "@/assets/product-recipe.png";
-import productConditioner from "@/assets/product-conditioner.png";
-import productLotion from "@/assets/product-lotion.png";
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
-import product4 from "@/assets/product-4.jpg";
+import { resolveProductImage } from "@/lib/productImages";
 
 interface Review {
   id: string;
@@ -33,17 +25,6 @@ interface Review {
   is_verified: boolean;
   created_at: string;
 }
-
-const productImages: Record<string, string> = {
-  "product-serum.png": productSerum,
-  "product-recipe.png": productRecipe,
-  "product-conditioner.png": productConditioner,
-  "product-lotion.png": productLotion,
-  "product-1.jpg": product1,
-  "product-2.jpg": product2,
-  "product-3.jpg": product3,
-  "product-4.jpg": product4,
-};
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -69,7 +50,7 @@ const ProductDetail = () => {
         .maybeSingle();
 
       if (data) {
-        const imageSrc = data.image && productImages[data.image] ? productImages[data.image] : productSerum;
+        const imageSrc = resolveProductImage(data.image);
         setProduct({ ...data, image: imageSrc });
       }
       setLoading(false);
@@ -95,7 +76,7 @@ const ProductDetail = () => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: typeof product.image === 'string' ? product.image : productSerum,
+      image: typeof product.image === 'string' ? product.image : resolveProductImage(null),
     });
     toast({ title: "Added to cart", description: `${product.name} has been added to your bag` });
   };
