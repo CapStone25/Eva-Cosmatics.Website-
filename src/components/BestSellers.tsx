@@ -7,52 +7,21 @@ import productSerum from "@/assets/product-serum.png";
 import productRecipe from "@/assets/product-recipe.png";
 import productConditioner from "@/assets/product-conditioner.png";
 import productLotion from "@/assets/product-lotion.png";
+import product1 from "@/assets/product-1.jpg";
+import product2 from "@/assets/product-2.jpg";
+import product3 from "@/assets/product-3.jpg";
+import product4 from "@/assets/product-4.jpg";
 
 const productImages: Record<string, string> = {
   "product-serum.png": productSerum,
   "product-recipe.png": productRecipe,
   "product-conditioner.png": productConditioner,
   "product-lotion.png": productLotion,
+  "product-1.jpg": product1,
+  "product-2.jpg": product2,
+  "product-3.jpg": product3,
+  "product-4.jpg": product4,
 };
-
-const staticProducts = [
-  {
-    id: "static-1",
-    image: productSerum,
-    name: "All-Around Safe Block Essence Sun SPF45+",
-    rating: 5,
-    reviews: 0,
-    price: "32$",
-    discount: 14,
-  },
-  {
-    id: "static-2",
-    image: productRecipe,
-    name: "Super Aqua Snail Cream",
-    rating: 5,
-    reviews: 0,
-    price: "32$",
-    featured: true,
-  },
-  {
-    id: "static-3",
-    image: productConditioner,
-    name: "Clarifying Emulsion",
-    rating: 5,
-    reviews: 0,
-    price: "32$",
-    featured: true,
-  },
-  {
-    id: "static-4",
-    image: productLotion,
-    name: "Dewy Glow Jelly Cream",
-    rating: 5,
-    reviews: 0,
-    price: "32$",
-    discount: 14,
-  },
-];
 
 interface DBProduct {
   id: string;
@@ -62,44 +31,36 @@ interface DBProduct {
 }
 
 const BestSellers = () => {
-  const [dbProducts, setDbProducts] = useState<DBProduct[]>([]);
+  const [products, setProducts] = useState<DBProduct[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       const { data } = await supabase
         .from("products")
         .select("id, name, price, image")
-        .order("created_at", { ascending: false })
+        .order("created_at", { ascending: true })
         .limit(4);
       
-      if (data) {
-        setDbProducts(data);
-      }
+      if (data) setProducts(data);
     };
     fetchProducts();
   }, []);
 
-  // Combine database products with static products, prioritizing DB products
-  const allProducts = [
-    ...dbProducts.map(p => ({
-      id: p.id,
-      image: p.image && productImages[p.image] ? productImages[p.image] : productSerum,
-      name: p.name,
-      rating: 5,
-      reviews: 0,
-      price: `${p.price}$`,
-    })),
-    ...staticProducts.slice(0, Math.max(0, 4 - dbProducts.length)),
-  ].slice(0, 4);
+  const allProducts = products.map(p => ({
+    id: p.id,
+    image: p.image && productImages[p.image] ? productImages[p.image] : productSerum,
+    name: p.name,
+    rating: 5,
+    reviews: 0,
+    price: `${p.price}$`,
+  }));
 
   return (
     <section className="py-12 md:py-16 bg-gradient-to-b from-background via-primary/5 to-background relative overflow-hidden">
-      {/* Decorative Elements */}
       <div className="absolute top-10 right-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
       <div className="absolute bottom-10 left-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
         <div className="flex items-center justify-center gap-4 mb-6 animate-fade-in">
           <div className="h-px w-16 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
           <h2 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
@@ -115,7 +76,6 @@ const BestSellers = () => {
           </button>
         </div>
 
-        {/* Products Grid */}
         <div className="relative">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {allProducts.map((product, index) => (
@@ -132,7 +92,6 @@ const BestSellers = () => {
             ))}
           </div>
 
-          {/* Carousel Controls */}
           <div className="flex items-center justify-center gap-6 mt-12 animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <Button
               variant="outline"

@@ -47,9 +47,7 @@ const BestSellers = () => {
         .select("id, name, price, image, skin_type")
         .order("created_at", { ascending: false });
       
-      if (data) {
-        setDbProducts(data);
-      }
+      if (data) setDbProducts(data);
     };
     fetchProducts();
   }, []);
@@ -61,131 +59,16 @@ const BestSellers = () => {
     "Water Cleansers",
   ];
 
-  const staticProducts = [
-    {
-      id: "static-1",
-      image: productSerum,
-      name: "All-Around Safe Block Essence Sun SPF45+",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      skinType: "All",
-      priceValue: 50,
-    },
-    {
-      id: "static-2",
-      image: productRecipe,
-      name: "Super Aqua Snail Cream",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      skinType: "Combination/Oily",
-      priceValue: 50,
-    },
-    {
-      id: "static-3",
-      image: productConditioner,
-      name: "Clarifying Emulsion",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      skinType: "Sensitive",
-      priceValue: 50,
-    },
-    {
-      id: "static-4",
-      image: product1,
-      name: "Dewy Glow Jelly Cream",
-      rating: 5,
-      reviews: 0,
-      price: "26$",
-      skinType: "Combination/Oily",
-      priceValue: 26,
-    },
-    {
-      id: "static-5",
-      image: product2,
-      name: "Fermented Soybean Bio Cellulose Mask",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      featured: true,
-      skinType: "Normal",
-      priceValue: 50,
-    },
-    {
-      id: "static-6",
-      image: product3,
-      name: "Pore Clearing Clay Mask 2X",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      skinType: "All",
-      priceValue: 50,
-    },
-    {
-      id: "static-7",
-      image: productLotion,
-      name: "Matte Priming UV Shield Sunscreen SPF 37",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      skinType: "Dry",
-      priceValue: 50,
-    },
-    {
-      id: "static-8",
-      image: product4,
-      name: "Soft Finish Sun Milk SPF50+/PA+++",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      featured: true,
-      skinType: "Dry",
-      priceValue: 50,
-    },
-    {
-      id: "static-9",
-      image: productSerum,
-      name: "Skin Reinforcement Get Type Cream",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      skinType: "Normal",
-      priceValue: 50,
-    },
-    {
-      id: "static-10",
-      image: product1,
-      name: "Lychee Soda Bubble Cleanser",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      discount: 25,
-      skinType: "All",
-      priceValue: 50,
-    },
-    {
-      id: "static-11",
-      image: product2,
-      name: "Rice Sheet Mask",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      skinType: "Sensitive",
-      priceValue: 50,
-    },
-    {
-      id: "static-12",
-      image: productConditioner,
-      name: "Gentle Exfoliating Toner",
-      rating: 5,
-      reviews: 0,
-      price: "50$",
-      skinType: "Combination/Oily",
-      priceValue: 50,
-    },
-  ];
+  const allProducts = dbProducts.map(p => ({
+    id: p.id,
+    image: p.image && productImages[p.image] ? productImages[p.image] : productSerum,
+    name: p.name,
+    rating: 5,
+    reviews: 0,
+    price: `${p.price}$`,
+    skinType: p.skin_type || "All",
+    priceValue: p.price,
+  }));
 
   const handleSkinTypeChange = (type: string) => {
     setSelectedSkinTypes((prev) =>
@@ -199,25 +82,9 @@ const BestSellers = () => {
     );
   };
 
-  // Combine database products with static products
-  const allProducts = [
-    ...dbProducts.map(p => ({
-      id: p.id,
-      image: p.image && productImages[p.image] ? productImages[p.image] : productSerum,
-      name: p.name,
-      rating: 5,
-      reviews: 0,
-      price: `${p.price}$`,
-      skinType: p.skin_type || "All",
-      priceValue: p.price,
-    })),
-    ...staticProducts,
-  ];
-
   const filteredProducts = useMemo(() => {
     let filtered = [...allProducts];
 
-    // Filter by skin type
     if (selectedSkinTypes.length > 0 && !selectedSkinTypes.includes("All")) {
       filtered = filtered.filter(
         (product) =>
@@ -226,7 +93,6 @@ const BestSellers = () => {
       );
     }
 
-    // Filter by price range
     if (selectedPriceRanges.length > 0) {
       filtered = filtered.filter((product) => {
         return selectedPriceRanges.some((range) => {
@@ -240,7 +106,6 @@ const BestSellers = () => {
       });
     }
 
-    // Sort products
     switch (sortBy) {
       case "price-low":
         filtered.sort((a, b) => a.priceValue - b.priceValue);
@@ -249,10 +114,8 @@ const BestSellers = () => {
         filtered.sort((a, b) => b.priceValue - a.priceValue);
         break;
       case "newest":
-        // Keep original order for newest
         break;
       default:
-        // relevance - keep original order
         break;
     }
 
@@ -266,7 +129,6 @@ const BestSellers = () => {
         <div className="flex gap-8">
           {/* Filters Sidebar */}
           <aside className="w-64 flex-shrink-0 space-y-6">
-            {/* Categories */}
             <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
               <nav className="space-y-3">
                 {categories.map((category) => (
@@ -280,21 +142,14 @@ const BestSellers = () => {
               </nav>
             </div>
 
-            {/* Filters */}
             <div className="bg-card rounded-lg p-6 shadow-sm border border-border space-y-6">
               <h3 className="font-bold text-lg">FILTERS</h3>
-
-              {/* Product Type */}
               <div>
                 <h4 className="font-semibold text-sm mb-3">Product Type</h4>
               </div>
-
-              {/* Ingredient Type */}
               <div>
                 <h4 className="font-semibold text-sm mb-3">Ingredient Type</h4>
               </div>
-
-              {/* Skin Type */}
               <div>
                 <h4 className="font-semibold text-sm mb-3">Skin Type</h4>
                 <div className="space-y-3">
@@ -305,18 +160,13 @@ const BestSellers = () => {
                         checked={selectedSkinTypes.includes(type)}
                         onCheckedChange={() => handleSkinTypeChange(type)}
                       />
-                      <Label
-                        htmlFor={type}
-                        className="text-sm font-normal cursor-pointer"
-                      >
+                      <Label htmlFor={type} className="text-sm font-normal cursor-pointer">
                         {type}
                       </Label>
                     </div>
                   ))}
                 </div>
               </div>
-
-              {/* Price Range */}
               <div>
                 <h4 className="font-semibold text-sm mb-3">Price Range</h4>
                 <div className="space-y-3">
@@ -327,10 +177,7 @@ const BestSellers = () => {
                         checked={selectedPriceRanges.includes(range)}
                         onCheckedChange={() => handlePriceRangeChange(range)}
                       />
-                      <Label
-                        htmlFor={range}
-                        className="text-sm font-normal cursor-pointer"
-                      >
+                      <Label htmlFor={range} className="text-sm font-normal cursor-pointer">
                         {range}
                       </Label>
                     </div>
