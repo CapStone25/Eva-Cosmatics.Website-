@@ -14,8 +14,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import logoIcon from "@/assets/logo-icon.png";
-import robotIcon from "@/assets/robot-icon.png";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
@@ -240,10 +238,6 @@ const Header = () => {
                 )}
               </Button>
 
-              <Button variant="ghost" size="icon" className="hover:scale-110 transition-transform duration-300">
-                <img src={robotIcon} alt="Robot Assistant" className="h-6 w-6" />
-              </Button>
-              <img src={logoIcon} alt="Eva Cosmetics" className="h-10 w-10 hidden md:block" />
             </div>
           </div>
         </div>
