@@ -7,6 +7,12 @@ import avatarAdmin from "@/assets/avatar-admin.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -141,14 +147,28 @@ const Header = () => {
               </Button>
               
               {user ? (
-                <button onClick={() => navigate("/profile")} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                  <img
-                    src={isAdmin ? avatarAdmin : avatarAccount}
-                    alt="Profile"
-                    className="h-8 w-8 rounded-full object-cover border border-border"
-                  />
-                  <span className="hidden md:inline text-sm font-medium text-foreground">{firstName}</span>
-                </button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                      <img
+                        src={isAdmin ? avatarAdmin : avatarAccount}
+                        alt="Profile"
+                        className="h-8 w-8 rounded-full object-cover border border-border"
+                      />
+                      <span className="hidden md:inline text-sm font-medium text-foreground">{firstName}</span>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => navigate("/profile")}>
+                      <User className="h-4 w-4 mr-2" />
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <span className="h-4 w-4 mr-2">🚪</span>
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
                   <DialogTrigger asChild>
