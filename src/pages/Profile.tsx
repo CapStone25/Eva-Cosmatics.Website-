@@ -10,8 +10,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { User, Package, Settings, LogOut } from "lucide-react";
-import avatarAccount from "@/assets/avatar-account.png";
-import avatarAdmin from "@/assets/avatar-admin.png";
 
 interface Profile {
   full_name: string | null;
@@ -28,7 +26,7 @@ interface Order {
 }
 
 const Profile = () => {
-  const { user, signOut, loading, isAdmin } = useAuth();
+  const { user, signOut, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profile, setProfile] = useState<Profile>({
@@ -128,17 +126,7 @@ const Profile = () => {
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <img
-                src={isAdmin ? avatarAdmin : avatarAccount}
-                alt="Profile"
-                className="h-16 w-16 rounded-full object-cover border-2 border-primary"
-              />
-              <div>
-                <h1 className="text-4xl font-bold text-foreground">My Profile</h1>
-                <p className="text-muted-foreground">{isAdmin ? "Admin" : "Member"}</p>
-              </div>
-            </div>
+            <h1 className="text-4xl font-bold text-foreground">My Profile</h1>
             <Button variant="outline" onClick={handleSignOut} className="gap-2">
               <LogOut className="h-4 w-4" />
               Sign Out
