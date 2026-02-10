@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, User, ShoppingBag } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import avatarAccount from "@/assets/avatar-account.png";
+import avatarAdmin from "@/assets/avatar-admin.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -42,6 +45,24 @@ const Header = () => {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [firstName, setFirstName] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("user_id", user.id)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data?.full_name) {
+            setFirstName(data.full_name.split(" ")[0]);
+          }
+        });
+    } else {
+      setFirstName("");
+    }
+  }, [user]);
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -120,9 +141,14 @@ const Header = () => {
               </Button>
               
               {user ? (
-                <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary" onClick={() => navigate("/profile")}>
-                  <User className="h-5 w-5" />
-                </Button>
+                <button onClick={() => navigate("/profile")} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                  <img
+                    src={isAdmin ? avatarAdmin : avatarAccount}
+                    alt="Profile"
+                    className="h-8 w-8 rounded-full object-cover border border-border"
+                  />
+                  <span className="hidden md:inline text-sm font-medium text-foreground">{firstName}</span>
+                </button>
               ) : (
                 <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
                   <DialogTrigger asChild>
