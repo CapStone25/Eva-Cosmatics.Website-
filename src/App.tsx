@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import BestSellers from "./pages/BestSellers";
 import AboutUs from "./pages/AboutUs";
@@ -20,22 +21,24 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <CartProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/best-sellers" element={<BestSellers />} />
-              <Route path="/product/:productId" element={<ProductDetail />} />
-              <Route path="/about-us" element={<AboutUs />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </CartProvider>
+        <LanguageProvider>
+          <CartProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/best-sellers" element={<BestSellers />} />
+                <Route path="/product/:productId" element={<ProductDetail />} />
+                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </CartProvider>
+        </LanguageProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
