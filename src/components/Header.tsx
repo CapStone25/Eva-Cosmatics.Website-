@@ -1,39 +1,48 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, User, ShoppingBag } from "lucide-react";
+import { Search, User, ShoppingBag, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
+import { useProfile } from "@/hooks/useProfile";
 import SearchDialog from "./SearchDialog";
 import CartDrawer from "./CartDrawer";
+
+const languages: { code: Language; label: string; flag: string }[] = [
+  { code: "en", label: "English", flag: "🇺🇸" },
+  { code: "ar", label: "العربية", flag: "🇪🇬" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+];
 
 const Header = () => {
   const navigate = useNavigate();
   const { user, isAdmin, signIn, signUp, signInWithGoogle, signInWithFacebook, signInWithTwitter, signOut } = useAuth();
   const { totalItems } = useCart();
   const { toast } = useToast();
-  
+  const { language, setLanguage, t } = useLanguage();
+  const { profile } = useProfile();
+
   const navItems = [
-    { label: "SHOP ALL", path: "/best-sellers" },
-    { label: "BESTSELLERS", path: "/best-sellers" },
-    { label: "ABOUT US", path: "/about-us" },
-    { label: "BLOG", path: "/blog" },
-    ...(isAdmin ? [{ label: "DASHBOARD", path: "/dashboard" }] : []),
+    { label: t("shopAll"), path: "/best-sellers" },
+    { label: t("bestsellers"), path: "/best-sellers" },
+    { label: t("aboutUs"), path: "/about-us" },
+    { label: t("blog"), path: "/blog" },
+    ...(isAdmin ? [{ label: t("dashboard"), path: "/dashboard" }] : []),
   ];
-  
+
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -48,12 +57,12 @@ const Header = () => {
     const { error } = await signIn(email, password);
     if (error) {
       if (error.message.includes("Invalid login")) {
-        toast({ title: "Error", description: "Invalid email or password", variant: "destructive" });
+        toast({ title: t("error"), description: t("invalidCredentials"), variant: "destructive" });
       } else {
-        toast({ title: "Error", description: error.message, variant: "destructive" });
+        toast({ title: t("error"), description: error.message, variant: "destructive" });
       }
     } else {
-      toast({ title: "Welcome back!", description: "You have signed in successfully" });
+      toast({ title: t("welcomeBack"), description: t("signedInSuccess") });
       setIsAuthOpen(false);
       resetForm();
     }
@@ -65,13 +74,13 @@ const Header = () => {
     const { error } = await signUp(email, password, fullName);
     if (error) {
       if (error.message.includes("already registered")) {
-        toast({ title: "Account exists", description: "Please login instead", variant: "destructive" });
+        toast({ title: t("accountExists"), description: t("pleaseLogin"), variant: "destructive" });
         setAuthTab("login");
       } else {
-        toast({ title: "Error", description: error.message, variant: "destructive" });
+        toast({ title: t("error"), description: error.message, variant: "destructive" });
       }
     } else {
-      toast({ title: "Welcome!", description: "Account created successfully" });
+      toast({ title: t("welcome"), description: t("accountCreated") });
       setIsAuthOpen(false);
       resetForm();
     }
@@ -80,7 +89,7 @@ const Header = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    toast({ title: "Signed out", description: "See you soon!" });
+    toast({ title: t("signedOut"), description: t("seeYouSoon") });
     navigate("/");
   };
 
@@ -89,6 +98,8 @@ const Header = () => {
     setPassword("");
     setFullName("");
   };
+
+  const firstName = profile?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "";
 
   return (
     <>
@@ -114,15 +125,45 @@ const Header = () => {
               ))}
             </nav>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              {/* Language Selector */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary">
+                    <Globe className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {languages.map((lang) => (
+                    <DropdownMenuItem
+                      key={lang.code}
+                      onClick={() => setLanguage(lang.code)}
+                      className={language === lang.code ? "bg-primary/10 text-primary" : ""}
+                    >
+                      <span className="mr-2">{lang.flag}</span>
+                      {lang.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary" onClick={() => setIsSearchOpen(true)}>
                 <Search className="h-5 w-5" />
               </Button>
-              
+
               {user ? (
-                <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary" onClick={() => navigate("/profile")}>
-                  <User className="h-5 w-5" />
-                </Button>
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-accent transition-colors"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                      {firstName.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">{firstName}</span>
+                </button>
               ) : (
                 <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
                   <DialogTrigger asChild>
@@ -132,31 +173,31 @@ const Header = () => {
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold text-center">Welcome</DialogTitle>
-                      <DialogDescription className="text-center">Sign in or create an account</DialogDescription>
+                      <DialogTitle className="text-2xl font-bold text-center">{t("welcome")}</DialogTitle>
+                      <DialogDescription className="text-center">{t("signInOrCreate")}</DialogDescription>
                     </DialogHeader>
                     <Tabs value={authTab} onValueChange={setAuthTab} className="w-full">
                       <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="login">Login</TabsTrigger>
-                        <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                        <TabsTrigger value="login">{t("login")}</TabsTrigger>
+                        <TabsTrigger value="signup">{t("signUp")}</TabsTrigger>
                       </TabsList>
                       <TabsContent value="login" className="space-y-4 mt-6">
                         <div className="space-y-2">
-                          <Label htmlFor="email">Email</Label>
+                          <Label htmlFor="email">{t("email")}</Label>
                           <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="password">Password</Label>
+                          <Label htmlFor="password">{t("password")}</Label>
                           <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
                         </div>
-                        <Button className="w-full" size="lg" onClick={handleSignIn} disabled={loading}>{loading ? "Signing in..." : "Sign In"}</Button>
+                        <Button className="w-full" size="lg" onClick={handleSignIn} disabled={loading}>{loading ? t("signingIn") : t("signIn")}</Button>
                         
                         <div className="relative my-4">
                           <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t border-border" />
                           </div>
                           <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                            <span className="bg-background px-2 text-muted-foreground">{t("orContinueWith")}</span>
                           </div>
                         </div>
                         
@@ -183,25 +224,25 @@ const Header = () => {
                       </TabsContent>
                       <TabsContent value="signup" className="space-y-4 mt-6">
                         <div className="space-y-2">
-                          <Label htmlFor="name">Full Name</Label>
+                          <Label htmlFor="name">{t("fullName")}</Label>
                           <Input id="name" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Your name" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="signup-email">Email</Label>
+                          <Label htmlFor="signup-email">{t("email")}</Label>
                           <Input id="signup-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="signup-password">Password</Label>
+                          <Label htmlFor="signup-password">{t("password")}</Label>
                           <Input id="signup-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
                         </div>
-                        <Button className="w-full" size="lg" onClick={handleSignUp} disabled={loading}>{loading ? "Creating..." : "Create Account"}</Button>
+                        <Button className="w-full" size="lg" onClick={handleSignUp} disabled={loading}>{loading ? t("creating") : t("createAccount")}</Button>
                         
                         <div className="relative my-4">
                           <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t border-border" />
                           </div>
                           <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                            <span className="bg-background px-2 text-muted-foreground">{t("orContinueWith")}</span>
                           </div>
                         </div>
                         
@@ -237,7 +278,6 @@ const Header = () => {
                   <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">{totalItems}</Badge>
                 )}
               </Button>
-
             </div>
           </div>
         </div>
