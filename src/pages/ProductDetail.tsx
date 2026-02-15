@@ -13,6 +13,7 @@ import { ChevronLeft, ChevronRight, Heart, Star, Droplets } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveProductImage } from "@/lib/productImages";
 
@@ -32,6 +33,7 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useLanguage();
   
   const [product, setProduct] = useState<any>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -43,90 +45,48 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       if (!productId) return;
-      const { data } = await supabase
-        .from("products")
-        .select("*")
-        .eq("id", productId)
-        .maybeSingle();
-
+      const { data } = await supabase.from("products").select("*").eq("id", productId).maybeSingle();
       if (data) {
         const imageSrc = resolveProductImage(data.image);
         setProduct({ ...data, image: imageSrc });
       }
       setLoading(false);
     };
-
     const fetchReviews = async () => {
       if (!productId) return;
-      const { data } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("product_id", productId)
-        .order("created_at", { ascending: false });
+      const { data } = await supabase.from("reviews").select("*").eq("product_id", productId).order("created_at", { ascending: false });
       if (data) setReviews(data);
     };
-
     fetchProduct();
     fetchReviews();
   }, [productId]);
 
   const handleAddToCart = () => {
     if (!product) return;
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: typeof product.image === 'string' ? product.image : resolveProductImage(null),
-    });
-    toast({ title: "Added to cart", description: `${product.name} has been added to your bag` });
+    addToCart({ id: product.id, name: product.name, price: product.price, image: typeof product.image === 'string' ? product.image : resolveProductImage(null) });
+    toast({ title: t("addedToCart"), description: `${product.name} ${t("addedToCartDesc")}` });
   };
 
   const handleSubmitReview = async () => {
-    if (!user) {
-      toast({ title: "Please login", description: "You need to be logged in to write a review", variant: "destructive" });
-      return;
-    }
-    if (!reviewForm.content.trim()) {
-      toast({ title: "Review required", description: "Please write your review", variant: "destructive" });
-      return;
-    }
+    if (!user) { toast({ title: t("pleaseLogin"), description: t("loginToReview"), variant: "destructive" }); return; }
+    if (!reviewForm.content.trim()) { toast({ title: t("reviewRequired"), description: t("pleaseWriteReview"), variant: "destructive" }); return; }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("full_name")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
+    const { data: profile } = await supabase.from("profiles").select("full_name").eq("user_id", user.id).maybeSingle();
     const { error } = await supabase.from("reviews").insert({
-      product_id: productId,
-      user_id: user.id,
-      rating: reviewForm.rating,
-      title: reviewForm.title,
-      content: reviewForm.content,
-      reviewer_name: profile?.full_name || user.email?.split("@")[0] || "Anonymous",
-      is_verified: true,
+      product_id: productId, user_id: user.id, rating: reviewForm.rating, title: reviewForm.title,
+      content: reviewForm.content, reviewer_name: profile?.full_name || user.email?.split("@")[0] || "Anonymous", is_verified: true,
     });
 
-    if (error) {
-      toast({ title: "Error", description: "Failed to submit review", variant: "destructive" });
-      return;
-    }
+    if (error) { toast({ title: t("error"), description: t("failedSubmitReview"), variant: "destructive" }); return; }
 
-    toast({ title: "Review submitted", description: "Thank you for your review!" });
+    toast({ title: t("reviewSubmitted"), description: t("thankYouReview") });
     setIsReviewDialogOpen(false);
     setReviewForm({ rating: 5, title: "", content: "" });
-
-    const { data } = await supabase
-      .from("reviews")
-      .select("*")
-      .eq("product_id", productId)
-      .order("created_at", { ascending: false });
+    const { data } = await supabase.from("reviews").select("*").eq("product_id", productId).order("created_at", { ascending: false });
     if (data) setReviews(data);
   };
 
-  const averageRating = reviews.length > 0
-    ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
-    : 0;
+  const averageRating = reviews.length > 0 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length : 0;
 
   if (loading) {
     return (
@@ -145,8 +105,8 @@ const ProductDetail = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold">Product not found</h1>
-          <Button onClick={() => navigate("/bestsellers")} className="mt-4">Back to Products</Button>
+          <h1 className="text-2xl font-bold">{t("productNotFound")}</h1>
+          <Button onClick={() => navigate("/best-sellers")} className="mt-4">{t("backToProducts")}</Button>
         </div>
         <Footer />
       </div>
@@ -163,24 +123,17 @@ const ProductDetail = () => {
           {/* Image Gallery */}
           <div className="space-y-4">
             <div className="relative aspect-square bg-secondary/30 rounded-2xl overflow-hidden flex items-center justify-center p-8">
-              <button 
-                onClick={() => setSelectedImageIndex(prev => Math.max(0, prev - 1))}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 rounded-full flex items-center justify-center hover:bg-background transition-colors"
-              >
+              <button onClick={() => setSelectedImageIndex(prev => Math.max(0, prev - 1))} className="absolute start-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 rounded-full flex items-center justify-center hover:bg-background transition-colors">
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <img src={productImagesArray[selectedImageIndex]} alt={product.name} className="max-h-full max-w-full object-contain animate-fade-in" />
-              <button 
-                onClick={() => setSelectedImageIndex(prev => Math.min(productImagesArray.length - 1, prev + 1))}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 rounded-full flex items-center justify-center hover:bg-background transition-colors"
-              >
+              <button onClick={() => setSelectedImageIndex(prev => Math.min(productImagesArray.length - 1, prev + 1))} className="absolute end-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 rounded-full flex items-center justify-center hover:bg-background transition-colors">
                 <ChevronRight className="h-5 w-5" />
               </button>
             </div>
             <div className="flex gap-3 justify-center">
               {productImagesArray.map((img, idx) => (
-                <button key={idx} onClick={() => setSelectedImageIndex(idx)}
-                  className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${selectedImageIndex === idx ? "border-primary" : "border-transparent"}`}>
+                <button key={idx} onClick={() => setSelectedImageIndex(idx)} className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${selectedImageIndex === idx ? "border-primary" : "border-transparent"}`}>
                   <img src={img} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
@@ -197,18 +150,18 @@ const ProductDetail = () => {
                     <Star key={star} className={`h-4 w-4 ${star <= Math.round(averageRating) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} />
                   ))}
                 </div>
-                <span className="text-sm text-muted-foreground">{reviews.length} review{reviews.length !== 1 ? "s" : ""}</span>
+                <span className="text-sm text-muted-foreground">{reviews.length} {t("review")}{reviews.length !== 1 ? "s" : ""}</span>
               </div>
               <p className="text-2xl font-bold text-foreground">${product.price.toFixed(2)}</p>
             </div>
 
             <p className="text-muted-foreground leading-relaxed">{product.description}</p>
-            <div className="text-sm text-muted-foreground">Size: 50 ml</div>
+            <div className="text-sm text-muted-foreground">{t("size")}</div>
 
             <div>
-              <p className="text-sm font-semibold mb-2">RECOMMENDED FOR</p>
+              <p className="text-sm font-semibold mb-2">{t("recommendedFor")}</p>
               <div className="flex flex-wrap gap-2">
-                {(product.skin_type || "All Skin Types").split(",").map((type: string, idx: number) => (
+                {(product.skin_type || t("allSkinTypes")).split(",").map((type: string, idx: number) => (
                   <Badge key={idx} variant="secondary" className="flex items-center gap-1">
                     <Droplets className="h-3 w-3" />{type.trim()}
                   </Badge>
@@ -217,22 +170,22 @@ const ProductDetail = () => {
             </div>
 
             <div className="flex gap-3">
-              <Button onClick={handleAddToCart} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground py-6 text-lg rounded-full">Add To Cart</Button>
+              <Button onClick={handleAddToCart} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground py-6 text-lg rounded-full">{t("addToCart")}</Button>
               <Button variant="outline" size="icon" className="h-14 w-14 rounded-full"><Heart className="h-5 w-5" /></Button>
             </div>
 
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="what-makes-good">
-                <AccordionTrigger className="text-sm font-semibold">WHAT MAKES IT GOOD</AccordionTrigger>
+                <AccordionTrigger className="text-sm font-semibold">{t("whatMakesItGood")}</AccordionTrigger>
                 <AccordionContent><p className="text-muted-foreground">{product.description}</p></AccordionContent>
               </AccordionItem>
               <AccordionItem value="ingredients">
-                <AccordionTrigger className="text-sm font-semibold">INGREDIENTS</AccordionTrigger>
-                <AccordionContent><p className="text-sm text-muted-foreground">Water, Glycerin, Niacinamide, Butylene Glycol, Cherry Blossom Extract, Betaine, Sodium Hyaluronate, Panthenol, Allantoin...</p></AccordionContent>
+                <AccordionTrigger className="text-sm font-semibold">{t("ingredients")}</AccordionTrigger>
+                <AccordionContent><p className="text-sm text-muted-foreground">{t("ingredientsList")}</p></AccordionContent>
               </AccordionItem>
               <AccordionItem value="how-to-use">
-                <AccordionTrigger className="text-sm font-semibold">HOW TO USE</AccordionTrigger>
-                <AccordionContent><p className="text-sm text-muted-foreground">Apply an appropriate amount to clean face and neck. Gently pat until fully absorbed. Use morning and evening.</p></AccordionContent>
+                <AccordionTrigger className="text-sm font-semibold">{t("howToUse")}</AccordionTrigger>
+                <AccordionContent><p className="text-sm text-muted-foreground">{t("howToUseDesc")}</p></AccordionContent>
               </AccordionItem>
             </Accordion>
           </div>
@@ -241,14 +194,14 @@ const ProductDetail = () => {
         {/* Reviews Section */}
         <section className="border-t border-border pt-12">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold">Customer Reviews ({reviews.length})</h2>
+            <h2 className="text-2xl font-bold">{t("customerReviews")} ({reviews.length})</h2>
             <Dialog open={isReviewDialogOpen} onOpenChange={setIsReviewDialogOpen}>
-              <DialogTrigger asChild><Button>Write a Review</Button></DialogTrigger>
+              <DialogTrigger asChild><Button>{t("writeReview")}</Button></DialogTrigger>
               <DialogContent>
-                <DialogHeader><DialogTitle>Write a Review</DialogTitle></DialogHeader>
+                <DialogHeader><DialogTitle>{t("writeReview")}</DialogTitle></DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <Label>Rating</Label>
+                    <Label>{t("rating")}</Label>
                     <div className="flex gap-1 mt-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button key={star} onClick={() => setReviewForm({ ...reviewForm, rating: star })}>
@@ -257,23 +210,23 @@ const ProductDetail = () => {
                       ))}
                     </div>
                   </div>
-                  <div><Label>Title</Label><Input value={reviewForm.title} onChange={(e) => setReviewForm({ ...reviewForm, title: e.target.value })} placeholder="Review title" /></div>
-                  <div><Label>Review</Label><Textarea value={reviewForm.content} onChange={(e) => setReviewForm({ ...reviewForm, content: e.target.value })} placeholder="Write your review..." rows={4} /></div>
-                  <Button onClick={handleSubmitReview} className="w-full">Submit Review</Button>
+                  <div><Label>{t("title")}</Label><Input value={reviewForm.title} onChange={(e) => setReviewForm({ ...reviewForm, title: e.target.value })} placeholder={t("reviewTitlePlaceholder")} /></div>
+                  <div><Label>{t("review")}</Label><Textarea value={reviewForm.content} onChange={(e) => setReviewForm({ ...reviewForm, content: e.target.value })} placeholder={t("reviewPlaceholder")} rows={4} /></div>
+                  <Button onClick={handleSubmitReview} className="w-full">{t("submitReview")}</Button>
                 </div>
               </DialogContent>
             </Dialog>
           </div>
 
           {reviews.length === 0 ? (
-            <p className="text-center text-muted-foreground py-8">No reviews yet. Be the first to review this product!</p>
+            <p className="text-center text-muted-foreground py-8">{t("noReviewsYet")}</p>
           ) : (
             <div className="space-y-6">
               {reviews.map((review) => (
                 <div key={review.id} className="border border-border rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="flex">{[1, 2, 3, 4, 5].map((star) => (<Star key={star} className={`h-4 w-4 ${star <= review.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} />))}</div>
-                    {review.is_verified && <Badge variant="secondary" className="text-xs">Verified</Badge>}
+                    {review.is_verified && <Badge variant="secondary" className="text-xs">{t("verified")}</Badge>}
                   </div>
                   {review.title && <h4 className="font-semibold mb-1">{review.title}</h4>}
                   <p className="text-muted-foreground text-sm mb-2">{review.content}</p>

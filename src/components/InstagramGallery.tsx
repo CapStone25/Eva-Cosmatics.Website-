@@ -1,7 +1,10 @@
 import { Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const InstagramGallery = () => {
+  const { t } = useLanguage();
+
   const instagramPosts = [
     "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&auto=format&fit=crop",
@@ -18,71 +21,47 @@ const InstagramGallery = () => {
       <div className="absolute bottom-10 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
         <div className="text-center mb-10 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-3">
             <div className="h-px w-12 bg-foreground/30"></div>
             <h2 className="text-2xl md:text-3xl font-bold">
-              <span className="text-foreground">SHARE HOW YOU BLOSSOMED WITH </span>
-              <span className="text-primary">#BLOOMBEAUTY</span>
+              <span className="text-foreground">{t("instagramTitle")} </span>
+              <span className="text-primary">{t("instagramHashtag")}</span>
             </h2>
             <div className="h-px w-12 bg-foreground/30"></div>
           </div>
-          <button className="text-sm text-primary hover:text-primary/80 font-medium transition-colors">
-            See All
-          </button>
+          <button className="text-sm text-primary hover:text-primary/80 font-medium transition-colors">{t("seeAll")}</button>
         </div>
 
-        {/* Instagram Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {instagramPosts.map((image, index) => (
-            <div
-              key={index}
-              className="relative aspect-square group overflow-hidden rounded-xl shadow-card hover:shadow-hover transition-all duration-500 animate-scale-in"
-              style={{ 
-                animationDelay: `${index * 0.05}s`,
-                animationFillMode: 'forwards',
-                opacity: 0
-              }}
-            >
-              <img
-                src={image}
-                alt={`Instagram post ${index + 1}`}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              />
+            <div key={index} className="relative aspect-square group overflow-hidden rounded-xl shadow-card hover:shadow-hover transition-all duration-500 animate-scale-in" style={{ animationDelay: `${index * 0.05}s`, animationFillMode: 'forwards', opacity: 0 }}>
+              <img src={image} alt={`Instagram post ${index + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/20 transition-colors duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center gap-2">
                   <Instagram className="w-8 h-8 text-white" />
-                  <span className="text-white text-sm font-medium">View on Instagram</span>
+                  <span className="text-white text-sm font-medium">{t("viewOnInstagram")}</span>
                 </div>
               </div>
               {index === 1 && (
-                <Button
-                  size="sm"
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-                >
-                  <Instagram className="w-4 h-4 mr-2" />
-                  See in @
+                <Button size="sm" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                  <Instagram className="w-4 h-4 ltr:mr-2 rtl:ml-2" />
+                  {t("seeInAt")}
                 </Button>
               )}
               {index === 0 && (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10"
-                >
-                  Buy Now
+                <Button variant="secondary" size="sm" className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+                  {t("buyNow")}
                 </Button>
               )}
             </div>
           ))}
         </div>
 
-        {/* Follow Button */}
         <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <Button size="lg" className="px-12">
-            <Instagram className="w-5 h-5 mr-2" />
-            Follow Us
+            <Instagram className="w-5 h-5 ltr:mr-2 rtl:ml-2" />
+            {t("followUs")}
           </Button>
         </div>
       </div>
