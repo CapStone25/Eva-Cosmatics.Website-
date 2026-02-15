@@ -4,6 +4,7 @@ import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveProductImage } from "@/lib/productImages";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DBProduct {
   id: string;
@@ -14,6 +15,7 @@ interface DBProduct {
 
 const BestSellers = () => {
   const [products, setProducts] = useState<DBProduct[]>([]);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -22,7 +24,6 @@ const BestSellers = () => {
         .select("id, name, price, image")
         .order("created_at", { ascending: true })
         .limit(4);
-      
       if (data) setProducts(data);
     };
     fetchProducts();
@@ -46,14 +47,14 @@ const BestSellers = () => {
         <div className="flex items-center justify-center gap-4 mb-6 animate-fade-in">
           <div className="h-px w-16 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
           <h2 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
-            BEST SELLERS
+            {t("bestSellersTitle")}
           </h2>
           <div className="h-px w-16 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
         </div>
 
         <div className="flex items-center justify-center mb-12 animate-fade-in" style={{ animationDelay: '0.1s' }}>
           <button className="text-sm text-primary hover:text-primary/80 font-semibold transition-all hover:scale-105 relative group">
-            See All
+            {t("seeAll")}
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
           </button>
         </div>
@@ -64,10 +65,7 @@ const BestSellers = () => {
               <div 
                 key={product.id}
                 className="opacity-0 animate-scale-in"
-                style={{ 
-                  animationDelay: `${index * 0.15}s`,
-                  animationFillMode: 'forwards'
-                }}
+                style={{ animationDelay: `${index * 0.15}s`, animationFillMode: 'forwards' }}
               >
                 <ProductCard id={product.id} {...product} />
               </div>
