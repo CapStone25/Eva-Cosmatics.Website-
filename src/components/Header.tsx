@@ -157,19 +157,18 @@ const Header = () => {
                 <Search className="h-[18px] w-[18px]" />
               </Button>
 
-              {/* User Avatar - Professional Style */}
               {user ? (
                 <button
                   onClick={() => navigate("/profile")}
-                  className="flex items-center gap-2 ltr:pl-1 rtl:pr-1 ltr:pr-3 rtl:pl-3 py-1.5 rounded-full bg-primary/5 hover:bg-primary/10 border border-primary/20 transition-all duration-300"
+                  className="flex items-center gap-2 px-1 py-1 rounded-full hover:opacity-80 transition-opacity"
                 >
-                  <Avatar className="h-8 w-8 ring-2 ring-primary/30 ring-offset-1 ring-offset-background">
+                  <Avatar className="h-9 w-9">
                     <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
                       {firstName.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-semibold text-foreground hidden sm:inline max-w-[80px] truncate">{firstName}</span>
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">{firstName}</span>
                 </button>
               ) : (
                 <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
