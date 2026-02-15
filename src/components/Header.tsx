@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, User, ShoppingBag, Globe } from "lucide-react";
+import { Search, User, ShoppingBag, Globe, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -25,6 +25,8 @@ const languages: { code: Language; label: string; flag: string }[] = [
   { code: "en", label: "English", flag: "🇺🇸" },
   { code: "ar", label: "العربية", flag: "🇪🇬" },
   { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "tr", label: "Türkçe", flag: "🇹🇷" },
 ];
 
 const Header = () => {
@@ -46,6 +48,7 @@ const Header = () => {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [authTab, setAuthTab] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -105,73 +108,77 @@ const Header = () => {
     <>
       <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
         <div className="container mx-auto px-4">
-          <div className="flex h-20 items-center justify-between">
-            <Link to="/" className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold">
+          <div className="flex h-16 md:h-20 items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+              <h1 className="text-xl md:text-2xl font-bold">
                 <span className="text-primary">Eva</span>
                 <span className="text-foreground"> Cosmetics</span>
               </h1>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-12">
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center gap-6 xl:gap-10">
               {navItems.map((item) => (
                 <button
                   key={item.label}
                   onClick={() => navigate(item.path)}
-                  className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+                  className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors whitespace-nowrap"
                 >
                   {item.label}
                 </button>
               ))}
             </nav>
 
-            <div className="flex items-center gap-3">
+            {/* Right Actions */}
+            <div className="flex items-center gap-1 sm:gap-2">
               {/* Language Selector */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary">
-                    <Globe className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary h-9 w-9">
+                    <Globe className="h-[18px] w-[18px]" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="min-w-[160px]">
                   {languages.map((lang) => (
                     <DropdownMenuItem
                       key={lang.code}
                       onClick={() => setLanguage(lang.code)}
-                      className={language === lang.code ? "bg-primary/10 text-primary" : ""}
+                      className={`gap-2 ${language === lang.code ? "bg-primary/10 text-primary font-semibold" : ""}`}
                     >
-                      <span className="mr-2">{lang.flag}</span>
+                      <span className="text-base">{lang.flag}</span>
                       {lang.label}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary" onClick={() => setIsSearchOpen(true)}>
-                <Search className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary h-9 w-9" onClick={() => setIsSearchOpen(true)}>
+                <Search className="h-[18px] w-[18px]" />
               </Button>
 
+              {/* User Avatar - Professional Style */}
               {user ? (
                 <button
                   onClick={() => navigate("/profile")}
-                  className="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-accent transition-colors"
+                  className="flex items-center gap-2 ltr:pl-1 rtl:pr-1 ltr:pr-3 rtl:pl-3 py-1.5 rounded-full bg-primary/5 hover:bg-primary/10 border border-primary/20 transition-all duration-300"
                 >
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 ring-2 ring-primary/30 ring-offset-1 ring-offset-background">
                     <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
                       {firstName.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-medium text-foreground hidden sm:inline">{firstName}</span>
+                  <span className="text-sm font-semibold text-foreground hidden sm:inline max-w-[80px] truncate">{firstName}</span>
                 </button>
               ) : (
                 <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
                   <DialogTrigger asChild>
-                    <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary">
-                      <User className="h-5 w-5" />
+                    <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary h-9 w-9">
+                      <User className="h-[18px] w-[18px]" />
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
+                  <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                       <DialogTitle className="text-2xl font-bold text-center">{t("welcome")}</DialogTitle>
                       <DialogDescription className="text-center">{t("signInOrCreate")}</DialogDescription>
@@ -272,15 +279,50 @@ const Header = () => {
                 </Dialog>
               )}
 
-              <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary relative" onClick={() => setIsCartOpen(true)}>
-                <ShoppingBag className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary relative h-9 w-9" onClick={() => setIsCartOpen(true)}>
+                <ShoppingBag className="h-[18px] w-[18px]" />
                 {totalItems > 0 && (
                   <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">{totalItems}</Badge>
                 )}
               </Button>
+
+              {/* Mobile Menu Toggle */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="lg:hidden text-foreground/80 hover:text-primary h-9 w-9"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden border-t border-border bg-background/98 backdrop-blur animate-in slide-in-from-top-2 duration-200">
+            <nav className="container mx-auto px-4 py-4 space-y-1">
+              {navItems.map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => { navigate(item.path); setIsMobileMenuOpen(false); }}
+                  className="block w-full text-start py-3 px-4 text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
+                >
+                  {item.label}
+                </button>
+              ))}
+              {user && (
+                <button
+                  onClick={() => { navigate("/profile"); setIsMobileMenuOpen(false); }}
+                  className="block w-full text-start py-3 px-4 text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
+                >
+                  {t("myProfile")}
+                </button>
+              )}
+            </nav>
+          </div>
+        )}
       </header>
       <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
       <CartDrawer open={isCartOpen} onOpenChange={setIsCartOpen} />
