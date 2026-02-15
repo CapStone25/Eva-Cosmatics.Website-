@@ -15,7 +15,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
-import { resolveProductImage } from "@/lib/productImages";
+import { resolveProductImage, translateProductName, translateProductDescription } from "@/lib/productImages";
 
 interface Review {
   id: string;
@@ -33,7 +33,7 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   const [product, setProduct] = useState<any>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -63,8 +63,9 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!product) return;
-    addToCart({ id: product.id, name: product.name, price: product.price, image: typeof product.image === 'string' ? product.image : resolveProductImage(null) });
-    toast({ title: t("addedToCart"), description: `${product.name} ${t("addedToCartDesc")}` });
+    const translatedName = translateProductName(product.name, language);
+    addToCart({ id: product.id, name: translatedName, price: product.price, image: typeof product.image === 'string' ? product.image : resolveProductImage(null) });
+    toast({ title: t("addedToCart"), description: `${translatedName} ${t("addedToCartDesc")}` });
   };
 
   const handleSubmitReview = async () => {
@@ -143,7 +144,7 @@ const ProductDetail = () => {
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">{product.name}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">{translateProductName(product.name, language)}</h1>
               <div className="flex items-center gap-2 mb-3">
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -155,7 +156,7 @@ const ProductDetail = () => {
               <p className="text-2xl font-bold text-foreground">${product.price.toFixed(2)}</p>
             </div>
 
-            <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+            <p className="text-muted-foreground leading-relaxed">{translateProductDescription(product.description, product.name, language)}</p>
             <div className="text-sm text-muted-foreground">{t("size")}</div>
 
             <div>
@@ -177,7 +178,7 @@ const ProductDetail = () => {
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="what-makes-good">
                 <AccordionTrigger className="text-sm font-semibold">{t("whatMakesItGood")}</AccordionTrigger>
-                <AccordionContent><p className="text-muted-foreground">{product.description}</p></AccordionContent>
+                <AccordionContent><p className="text-muted-foreground">{translateProductDescription(product.description, product.name, language)}</p></AccordionContent>
               </AccordionItem>
               <AccordionItem value="ingredients">
                 <AccordionTrigger className="text-sm font-semibold">{t("ingredients")}</AccordionTrigger>

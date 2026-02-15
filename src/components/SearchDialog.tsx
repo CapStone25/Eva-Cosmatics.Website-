@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { resolveProductImage } from "@/lib/productImages";
+import { resolveProductImage, translateProductName } from "@/lib/productImages";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SearchDialogProps {
@@ -14,7 +14,7 @@ interface SearchDialogProps {
 
 const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
 
@@ -31,7 +31,10 @@ const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
 
   const filteredResults = searchQuery.trim() === ""
     ? results
-    : results.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    : results.filter((p) => {
+        const translatedName = translateProductName(p.name, language);
+        return translatedName.toLowerCase().includes(searchQuery.toLowerCase()) || p.name.toLowerCase().includes(searchQuery.toLowerCase());
+      });
 
   const handleProductClick = (productId: string) => {
     onOpenChange(false);
@@ -66,9 +69,9 @@ const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
                 onClick={() => handleProductClick(product.id)}
                 className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-muted transition-colors text-start"
               >
-                <img src={resolveProductImage(product.image)} alt={product.name} className="w-16 h-16 object-cover rounded-lg" />
+                <img src={resolveProductImage(product.image)} alt={translateProductName(product.name, language)} className="w-16 h-16 object-cover rounded-lg" />
                 <div>
-                  <p className="font-medium text-foreground">{product.name}</p>
+                  <p className="font-medium text-foreground">{translateProductName(product.name, language)}</p>
                   <p className="text-sm text-primary">${product.price}</p>
                 </div>
               </button>
