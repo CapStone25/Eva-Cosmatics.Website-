@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { resolveProductImage } from "@/lib/productImages";
+import { resolveProductImage, translateProductName } from "@/lib/productImages";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DBProduct {
@@ -15,7 +15,7 @@ interface DBProduct {
 
 const NewArrivals = () => {
   const [products, setProducts] = useState<DBProduct[]>([]);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,7 +32,7 @@ const NewArrivals = () => {
   const allProducts = products.map(p => ({
     id: p.id,
     image: resolveProductImage(p.image),
-    name: p.name,
+    name: translateProductName(p.name, language),
     rating: 5,
     reviews: 0,
     price: `${p.price}$`,

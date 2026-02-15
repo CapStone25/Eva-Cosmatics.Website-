@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { resolveProductImage } from "@/lib/productImages";
+import { resolveProductImage, translateProductName } from "@/lib/productImages";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DBProduct {
@@ -22,7 +22,7 @@ const BestSellers = () => {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("relevance");
   const [dbProducts, setDbProducts] = useState<DBProduct[]>([]);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -48,7 +48,7 @@ const BestSellers = () => {
   ];
 
   const allProducts = dbProducts.map(p => ({
-    id: p.id, image: resolveProductImage(p.image), name: p.name, rating: 5, reviews: 0,
+    id: p.id, image: resolveProductImage(p.image), name: translateProductName(p.name, language), rating: 5, reviews: 0,
     price: `${p.price}$`, skinType: p.skin_type || "All", priceValue: p.price,
   }));
 
