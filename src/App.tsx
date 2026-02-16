@@ -6,10 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import BestSellers from "./pages/BestSellers";
 import AboutUs from "./pages/AboutUs";
 import Blog from "./pages/Blog";
+import BlogArticle from "./pages/BlogArticle";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import ProductDetail from "./pages/ProductDetail";
@@ -26,12 +28,14 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <ScrollToTop />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/best-sellers" element={<BestSellers />} />
                 <Route path="/product/:productId" element={<ProductDetail />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:articleId" element={<BlogArticle />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="*" element={<NotFound />} />
