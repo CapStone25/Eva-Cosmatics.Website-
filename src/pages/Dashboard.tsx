@@ -15,8 +15,9 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Package, ShoppingCart, Plus, Pencil, Trash2 } from "lucide-react";
+import { Package, ShoppingCart, Plus, Pencil, Trash2, Users } from "lucide-react";
 import { resolveProductImage, productImageOptions } from "@/lib/productImages";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface Product {
   id: string;
@@ -46,6 +47,16 @@ interface OrderItem {
   price: number;
 }
 
+interface UserProfile {
+  id: string;
+  user_id: string;
+  full_name: string | null;
+  email: string | null;
+  phone: string | null;
+  avatar_url: string | null;
+  created_at: string;
+}
+
 const Dashboard = () => {
   const { user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
@@ -53,6 +64,7 @@ const Dashboard = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [orderItems, setOrderItems] = useState<Record<string, OrderItem[]>>({});
+  const [users, setUsers] = useState<UserProfile[]>([]);
   const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [productForm, setProductForm] = useState({
@@ -74,8 +86,17 @@ const Dashboard = () => {
     if (isAdmin) {
       fetchProducts();
       fetchOrders();
+      fetchUsers();
     }
   }, [isAdmin]);
+
+  const fetchUsers = async () => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (data) setUsers(data as UserProfile[]);
+  };
 
   const fetchProducts = async () => {
     const { data } = await supabase
@@ -211,12 +232,15 @@ const Dashboard = () => {
           </div>
 
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsList className="grid w-full grid-cols-3 mb-8">
               <TabsTrigger value="products" className="gap-2">
                 <Package className="h-4 w-4" />Products
               </TabsTrigger>
               <TabsTrigger value="orders" className="gap-2">
                 <ShoppingCart className="h-4 w-4" />Orders
+              </TabsTrigger>
+              <TabsTrigger value="users" className="gap-2">
+                <Users className="h-4 w-4" />Users
               </TabsTrigger>
             </TabsList>
 
@@ -370,6 +394,40 @@ const Dashboard = () => {
                             </div>
                           </div>
                         )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+            <TabsContent value="users" className="space-y-6">
+              <div className="bg-card rounded-2xl p-8 shadow-card">
+                <h2 className="text-2xl font-semibold text-foreground mb-6">All Users ({users.length})</h2>
+                {users.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">No users yet</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {users.map((u) => (
+                      <div key={u.id} className="flex items-center justify-between p-4 bg-muted rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={u.avatar_url || undefined} />
+                            <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                              {(u.full_name || u.email || "U").charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium text-foreground">{u.full_name || "No name"}</p>
+                            <p className="text-sm text-muted-foreground">{u.email || "No email"}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-muted-foreground">{u.phone || "—"}</p>
+                          <p className="text-xs text-muted-foreground">{new Date(u.created_at).toLocaleDateString()}</p>
+                        </div>
                       </div>
                     ))}
                   </div>

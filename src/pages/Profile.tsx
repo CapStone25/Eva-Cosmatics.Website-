@@ -11,7 +11,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { User, Package, Settings, LogOut, Camera } from "lucide-react";
+import { User, Package, Settings, LogOut, Camera, Lock, Bell } from "lucide-react";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 
 interface Profile {
   full_name: string | null;
@@ -44,6 +48,11 @@ const Profile = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [emailNotifications, setEmailNotifications] = useState(true);
 
   useEffect(() => {
     if (!loading && !user) navigate("/");
@@ -135,6 +144,28 @@ const Profile = () => {
       toast({ title: t("success"), description: t("profileUpdated") });
     }
     setSaving(false);
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword.length < 6) {
+      toast({ title: t("error"), description: "Password must be at least 6 characters", variant: "destructive" });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast({ title: t("error"), description: "Passwords do not match", variant: "destructive" });
+      return;
+    }
+    setChangingPassword(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      toast({ title: t("error"), description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: t("success"), description: "Password updated successfully" });
+      setPasswordDialogOpen(false);
+      setNewPassword("");
+      setConfirmPassword("");
+    }
+    setChangingPassword(false);
   };
 
   const handleSignOut = async () => {
@@ -272,21 +303,62 @@ const Profile = () => {
                 <h2 className="text-2xl font-semibold text-foreground mb-6">{t("accountSettings")}</h2>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 bg-muted rounded-xl">
-                    <div>
-                      <p className="font-medium text-foreground">{t("emailNotifications")}</p>
-                      <p className="text-sm text-muted-foreground">{t("receiveUpdates")}</p>
+                    <div className="flex items-center gap-3">
+                      <Bell className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="font-medium text-foreground">{t("emailNotifications")}</p>
+                        <p className="text-sm text-muted-foreground">{t("receiveUpdates")}</p>
+                      </div>
                     </div>
-                    <Button variant="outline" size="sm">{t("manage")}</Button>
+                    <Switch
+                      checked={emailNotifications}
+                      onCheckedChange={setEmailNotifications}
+                    />
                   </div>
                   <div className="flex items-center justify-between p-4 bg-muted rounded-xl">
-                    <div>
-                      <p className="font-medium text-foreground">{t("password")}</p>
-                      <p className="text-sm text-muted-foreground">{t("changePassword")}</p>
+                    <div className="flex items-center gap-3">
+                      <Lock className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="font-medium text-foreground">{t("password")}</p>
+                        <p className="text-sm text-muted-foreground">{t("changePassword")}</p>
+                      </div>
                     </div>
-                    <Button variant="outline" size="sm">{t("update")}</Button>
+                    <Button variant="outline" size="sm" onClick={() => setPasswordDialogOpen(true)}>{t("update")}</Button>
                   </div>
                 </div>
               </div>
+
+              <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>{t("changePassword")}</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="newPassword">New Password</Label>
+                      <Input
+                        id="newPassword"
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Min 6 characters"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="confirmPassword">Confirm Password</Label>
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
+                    </div>
+                    <Button onClick={handleChangePassword} className="w-full" disabled={changingPassword}>
+                      {changingPassword ? "Updating..." : t("update")}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </TabsContent>
           </Tabs>
         </div>
