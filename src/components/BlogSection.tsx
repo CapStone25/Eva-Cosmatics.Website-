@@ -54,7 +54,7 @@ const BlogSection = () => {
               <div className="p-6">
                 <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">{post.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{post.description}</p>
-                <Button variant={post.featured ? "default" : "outline"} className="w-full" onClick={(e) => { e.stopPropagation(); navigate("/blog"); }}>{t("readMore")}</Button>
+                <Button variant={post.featured ? "default" : "outline"} className="w-full" onClick={(e) => { e.stopPropagation(); navigate(`/blog/${index + 1}`); }}>{t("readMore")}</Button>
               </div>
             </div>
           ))}

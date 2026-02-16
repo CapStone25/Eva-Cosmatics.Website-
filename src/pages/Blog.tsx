@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ const Blog = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   const blogPosts = [
     {
@@ -105,7 +107,7 @@ const Blog = () => {
         ) : (
           <div className="space-y-8">
             {paginatedPosts.map((post, index) => (
-              <article key={post.id} className={`bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-500 animate-fade-in ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex flex-col md:flex`} style={{ animationDelay: `${index * 0.1}s` }}>
+              <article key={post.id} onClick={() => navigate(`/blog/${post.id}`)} className={`bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-500 animate-fade-in cursor-pointer ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex flex-col md:flex`} style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="md:w-2/5 h-64 md:h-auto overflow-hidden">
                   <img src={post.image} alt={post.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
@@ -119,13 +121,13 @@ const Blog = () => {
                         key={tag}
                         variant={activeTag === tag ? "default" : "outline"}
                         className="text-xs border-primary/30 text-primary hover:bg-primary/10 cursor-pointer"
-                        onClick={() => handleTagClick(tag)}
+                        onClick={(e) => { e.stopPropagation(); handleTagClick(tag); }}
                       >
                         # {tag}
                       </Badge>
                     ))}
                   </div>
-                  <Button variant="outline" className="w-fit border-primary text-primary hover:bg-primary hover:text-primary-foreground">{t("readMore")}</Button>
+                  <Button variant="outline" className="w-fit border-primary text-primary hover:bg-primary hover:text-primary-foreground" onClick={(e) => { e.stopPropagation(); navigate(`/blog/${post.id}`); }}>{t("readMore")}</Button>
                 </div>
               </article>
             ))}
