@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import heroProducts from "@/assets/hero-products.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const { t, dir } = useLanguage();
+  const navigate = useNavigate();
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-secondary/50 to-secondary/30 py-20 md:py-32">
@@ -20,6 +22,7 @@ const Hero = () => {
             </p>
             <Button 
               size="lg" 
+              onClick={() => navigate("/best-sellers")}
               className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground px-12 py-6 text-base rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
             >
               {t("shopNow")}
