@@ -50,20 +50,20 @@ const AboutUs = () => {
                   <AccordionItem value="domestic" className="border-border">
                     <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{t("domesticShipping")}</AccordionTrigger>
                     <AccordionContent className="text-muted-foreground leading-relaxed">
-                      <p>We offer free standard shipping on all orders over $50. Standard shipping typically takes 3-5 business days.</p>
-                      <p className="mt-2">Express shipping is available for an additional fee and delivers within 1-2 business days.</p>
+                      <p>{t("domesticShippingDesc1")}</p>
+                      <p className="mt-2">{t("domesticShippingDesc2")}</p>
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="international" className="border-border">
                     <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{t("internationalShipping")}</AccordionTrigger>
                     <AccordionContent className="text-muted-foreground leading-relaxed">
-                      <p>We're pleased to offer international shipping via BorderGuru. International shipping and import fees including customs duties, taxes and fees are calculated at check-out.</p>
+                      <p>{t("internationalShippingDesc")}</p>
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="restriction" className="border-border">
                     <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{t("shippingRestriction")}</AccordionTrigger>
                     <AccordionContent className="text-muted-foreground leading-relaxed">
-                      <p>Some products may have shipping restrictions due to their ingredients or size.</p>
+                      <p>{t("shippingRestrictionDesc")}</p>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -72,15 +72,15 @@ const AboutUs = () => {
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="policy" className="border-border">
                     <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{t("returnPolicy")}</AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground leading-relaxed">We accept returns within 30 days of purchase for unused, unopened products in their original packaging.</AccordionContent>
+                    <AccordionContent className="text-muted-foreground leading-relaxed">{t("returnPolicyDesc")}</AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="how-to" className="border-border">
                     <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{t("howToReturn")}</AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground leading-relaxed">To initiate a return, please contact our customer service team with your order number.</AccordionContent>
+                    <AccordionContent className="text-muted-foreground leading-relaxed">{t("howToReturnDesc")}</AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="refunds" className="border-border">
                     <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{t("refunds")}</AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground leading-relaxed">Once we receive your return, we will process your refund within 5-7 business days.</AccordionContent>
+                    <AccordionContent className="text-muted-foreground leading-relaxed">{t("refundsDesc")}</AccordionContent>
                   </AccordionItem>
                 </Accordion>
               </div>
@@ -98,9 +98,9 @@ const AboutUs = () => {
                   <div className="bg-gradient-to-br from-primary/10 to-secondary rounded-2xl p-8">
                     <h3 className="text-xl font-semibold text-foreground mb-4">{t("businessHours")}</h3>
                     <div className="space-y-2 text-muted-foreground">
-                      <p>Monday - Friday: 9:00 AM - 6:00 PM PST</p>
-                      <p>Saturday: 10:00 AM - 4:00 PM PST</p>
-                      <p>Sunday: Closed</p>
+                      <p>{t("businessHoursWeekday")}</p>
+                      <p>{t("businessHoursSaturday")}</p>
+                      <p>{t("businessHoursSunday")}</p>
                     </div>
                   </div>
                 </div>
@@ -112,11 +112,11 @@ const AboutUs = () => {
                 <h1 className="text-4xl font-bold text-foreground">{t("faqs")}</h1>
                 <Accordion type="single" collapsible className="w-full">
                   {[
-                    { q: "Are your products cruelty-free?", a: "Yes! All Eva Cosmetics products are 100% cruelty-free." },
-                    { q: "What is your return policy?", a: "We offer a 30-day return policy for unused, unopened products." },
-                    { q: "How long does shipping take?", a: "Domestic orders typically arrive within 3-5 business days." },
-                    { q: "Do you offer samples?", a: "Yes! We include free samples with every order." },
-                    { q: "How do I track my order?", a: "Once your order ships, you'll receive an email with tracking information." },
+                    { q: t("faqQ1"), a: t("faqA1") },
+                    { q: t("faqQ2"), a: t("faqA2") },
+                    { q: t("faqQ3"), a: t("faqA3") },
+                    { q: t("faqQ4"), a: t("faqA4") },
+                    { q: t("faqQ5"), a: t("faqA5") },
                   ].map((faq, i) => (
                     <AccordionItem key={i} value={`faq-${i}`} className="border-border">
                       <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{faq.q}</AccordionTrigger>
