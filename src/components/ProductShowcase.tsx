@@ -3,9 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import showcase1 from "@/assets/showcase-1.jpg";
 import showcase2 from "@/assets/showcase-2.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const ProductShowcase = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   const showcases = [
     {
@@ -58,10 +60,19 @@ const ProductShowcase = () => {
                 ))}
               </div>
               <div className="flex flex-wrap gap-4 pt-6">
-                <Button size="lg" className="bg-gradient-to-r from-primary via-primary to-primary/90 hover:via-primary/90 text-primary-foreground shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 font-semibold px-8 rounded-xl">
+                <Button 
+                  size="lg" 
+                  onClick={() => navigate("/best-sellers")}
+                  className="bg-gradient-to-r from-primary via-primary to-primary/90 hover:via-primary/90 text-primary-foreground shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 font-semibold px-8 rounded-xl"
+                >
                   {t("shopNow")}
                 </Button>
-                <Button variant="outline" size="lg" className="group border-2 hover:border-primary hover:bg-primary/5 transition-all duration-300 hover:scale-105 font-semibold px-8 rounded-xl">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  onClick={() => navigate("/best-sellers")}
+                  className="group border-2 hover:border-primary hover:bg-primary/5 transition-all duration-300 hover:scale-105 font-semibold px-8 rounded-xl"
+                >
                   {t("exploreMore")} 
                   <span className="ltr:ml-2 rtl:mr-2 inline-block transition-transform group-hover:ltr:translate-x-2 group-hover:rtl:-translate-x-2 duration-300">→</span>
                 </Button>

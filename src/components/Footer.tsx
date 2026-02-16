@@ -2,16 +2,18 @@ import { Facebook, Instagram, Twitter, Youtube, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   return (
     <footer className="bg-[hsl(0,0%,15%)] text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
           <div className="md:col-span-1">
-            <h3 className="text-xl font-bold mb-4 text-primary">Eva Cosmetics</h3>
+            <h3 className="text-xl font-bold mb-4 text-primary cursor-pointer" onClick={() => navigate("/")}>Eva Cosmetics</h3>
             <p className="text-sm text-white/80 mb-3">{t("footerDesc")}</p>
             <p className="text-sm text-white/70 mb-1">📞 +380 50 123 45 67</p>
             <p className="text-sm text-white/70 mb-1">📧 bloom@email.com</p>
@@ -21,26 +23,26 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4 text-white/90">{t("help")}</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-white/70 hover:text-primary transition-colors">{t("contactUs")}</a></li>
-              <li><a href="#" className="text-sm text-white/70 hover:text-primary transition-colors">{t("faq")}</a></li>
-              <li><a href="#" className="text-sm text-white/70 hover:text-primary transition-colors">{t("shippingReturns")}</a></li>
+              <li><button onClick={() => navigate("/about-us")} className="text-sm text-white/70 hover:text-primary transition-colors">{t("contactUs")}</button></li>
+              <li><button onClick={() => navigate("/about-us")} className="text-sm text-white/70 hover:text-primary transition-colors">{t("faq")}</button></li>
+              <li><button onClick={() => navigate("/about-us")} className="text-sm text-white/70 hover:text-primary transition-colors">{t("shippingReturns")}</button></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold mb-4 text-white/90">{t("myAccount")}</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-white/70 hover:text-primary transition-colors">{t("addresses")}</a></li>
-              <li><a href="#" className="text-sm text-white/70 hover:text-primary transition-colors">{t("orderStatus")}</a></li>
-              <li><a href="#" className="text-sm text-white/70 hover:text-primary transition-colors">{t("wishlist")}</a></li>
+              <li><button onClick={() => navigate("/profile")} className="text-sm text-white/70 hover:text-primary transition-colors">{t("addresses")}</button></li>
+              <li><button onClick={() => navigate("/profile")} className="text-sm text-white/70 hover:text-primary transition-colors">{t("orderStatus")}</button></li>
+              <li><button onClick={() => navigate("/best-sellers")} className="text-sm text-white/70 hover:text-primary transition-colors">{t("wishlist")}</button></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold mb-4 text-white/90">{t("customerCare")}</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-white/70 hover:text-primary transition-colors">{t("aboutUs")}</a></li>
-              <li><a href="#" className="text-sm text-white/70 hover:text-primary transition-colors">{t("blog")}</a></li>
+              <li><button onClick={() => navigate("/about-us")} className="text-sm text-white/70 hover:text-primary transition-colors">{t("aboutUs")}</button></li>
+              <li><button onClick={() => navigate("/blog")} className="text-sm text-white/70 hover:text-primary transition-colors">{t("blog")}</button></li>
             </ul>
           </div>
 
@@ -57,16 +59,21 @@ const Footer = () => {
         <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex gap-4">
-              {[Facebook, Instagram, Twitter, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-full bg-white/10 hover:bg-primary flex items-center justify-center transition-colors">
+              {[
+                { Icon: Facebook, url: "https://facebook.com" },
+                { Icon: Instagram, url: "https://instagram.com" },
+                { Icon: Twitter, url: "https://twitter.com" },
+                { Icon: Youtube, url: "https://youtube.com" },
+              ].map(({ Icon, url }, i) => (
+                <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 hover:bg-primary flex items-center justify-center transition-colors">
                   <Icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
             <div className="flex gap-6 text-sm text-white/60">
-              <span>© 2023 Eva Cosmetics</span>
-              <a href="#" className="hover:text-primary transition-colors">{t("privacyPolicy")}</a>
-              <a href="#" className="hover:text-primary transition-colors">{t("termsConditions")}</a>
+              <span>© 2026 Eva Cosmetics</span>
+              <button onClick={() => navigate("/about-us")} className="hover:text-primary transition-colors">{t("privacyPolicy")}</button>
+              <button onClick={() => navigate("/about-us")} className="hover:text-primary transition-colors">{t("termsConditions")}</button>
             </div>
           </div>
         </div>

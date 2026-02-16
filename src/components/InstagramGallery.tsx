@@ -1,9 +1,11 @@
 import { Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const InstagramGallery = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   const instagramPosts = [
     "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&auto=format&fit=crop",
@@ -30,12 +32,19 @@ const InstagramGallery = () => {
             </h2>
             <div className="h-px w-12 bg-foreground/30"></div>
           </div>
-          <button className="text-sm text-primary hover:text-primary/80 font-medium transition-colors">{t("seeAll")}</button>
+          <button onClick={() => navigate("/best-sellers")} className="text-sm text-primary hover:text-primary/80 font-medium transition-colors">{t("seeAll")}</button>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {instagramPosts.map((image, index) => (
-            <div key={index} className="relative aspect-square group overflow-hidden rounded-xl shadow-card hover:shadow-hover transition-all duration-500 animate-scale-in" style={{ animationDelay: `${index * 0.05}s`, animationFillMode: 'forwards', opacity: 0 }}>
+            <a 
+              key={index} 
+              href="https://instagram.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="relative aspect-square group overflow-hidden rounded-xl shadow-card hover:shadow-hover transition-all duration-500 animate-scale-in block" 
+              style={{ animationDelay: `${index * 0.05}s`, animationFillMode: 'forwards', opacity: 0 }}
+            >
               <img src={image} alt={`Instagram post ${index + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/20 transition-colors duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center gap-2">
@@ -50,19 +59,21 @@ const InstagramGallery = () => {
                 </Button>
               )}
               {index === 0 && (
-                <Button variant="secondary" size="sm" className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+                <Button variant="secondary" size="sm" className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10" onClick={(e) => { e.preventDefault(); navigate("/best-sellers"); }}>
                   {t("buyNow")}
                 </Button>
               )}
-            </div>
+            </a>
           ))}
         </div>
 
         <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          <Button size="lg" className="px-12">
-            <Instagram className="w-5 h-5 ltr:mr-2 rtl:ml-2" />
-            {t("followUs")}
-          </Button>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <Button size="lg" className="px-12">
+              <Instagram className="w-5 h-5 ltr:mr-2 rtl:ml-2" />
+              {t("followUs")}
+            </Button>
+          </a>
         </div>
       </div>
     </section>
