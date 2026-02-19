@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { ChevronLeft, ChevronRight, Heart, Star, Droplets } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,6 +33,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { user } = useAuth();
+  const { isWishlisted, toggleWishlist } = useWishlist();
   const { toast } = useToast();
   const { t, language } = useLanguage();
   
@@ -206,9 +208,26 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <Button onClick={handleAddToCart} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground py-6 text-lg rounded-full">{t("addToCart")}</Button>
-              <Button variant="outline" size="icon" className="h-14 w-14 rounded-full"><Heart className="h-5 w-5" /></Button>
+            <div className="flex gap-3 items-center">
+              <Button onClick={handleAddToCart} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground py-6 text-lg rounded-full font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                {t("addToCart")}
+              </Button>
+              <button
+                onClick={async () => {
+                  if (!user) {
+                    toast({ title: t("pleaseSignIn"), description: t("signInToOrder"), variant: "destructive" });
+                    return;
+                  }
+                  if (product?.id) await toggleWishlist(product.id);
+                }}
+                className={`h-14 w-14 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 hover:scale-110 ${
+                  product?.id && isWishlisted(product.id)
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background text-muted-foreground hover:border-primary hover:text-primary"
+                }`}
+              >
+                <Heart className={`h-5 w-5 transition-all duration-300 ${product?.id && isWishlisted(product.id) ? "fill-primary" : ""}`} />
+              </button>
             </div>
 
             <Accordion type="single" collapsible className="w-full">
