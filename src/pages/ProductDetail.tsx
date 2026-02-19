@@ -123,19 +123,55 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* Image Gallery */}
           <div className="space-y-4">
-            <div className="relative aspect-square bg-secondary/30 rounded-2xl overflow-hidden flex items-center justify-center p-8">
-              <button onClick={() => setSelectedImageIndex(prev => Math.max(0, prev - 1))} className="absolute start-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 rounded-full flex items-center justify-center hover:bg-background transition-colors">
+            {/* Main Image - Large, high-quality display */}
+            <div className="relative bg-gradient-to-br from-secondary/20 to-secondary/50 rounded-3xl overflow-hidden shadow-lg" style={{ aspectRatio: "1 / 1" }}>
+              <button
+                onClick={() => setSelectedImageIndex(prev => Math.max(0, prev - 1))}
+                className="absolute start-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-background/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-background hover:shadow-md transition-all"
+              >
                 <ChevronLeft className="h-5 w-5" />
               </button>
-              <img src={productImagesArray[selectedImageIndex]} alt={product.name} className="max-h-full max-w-full object-contain animate-fade-in" />
-              <button onClick={() => setSelectedImageIndex(prev => Math.min(productImagesArray.length - 1, prev + 1))} className="absolute end-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 rounded-full flex items-center justify-center hover:bg-background transition-colors">
+
+              <img
+                src={productImagesArray[selectedImageIndex]}
+                alt={product.name}
+                key={selectedImageIndex}
+                className="w-full h-full object-contain p-10 animate-fade-in"
+                style={{
+                  filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.12))",
+                }}
+              />
+
+              <button
+                onClick={() => setSelectedImageIndex(prev => Math.min(productImagesArray.length - 1, prev + 1))}
+                className="absolute end-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-background/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-background hover:shadow-md transition-all"
+              >
                 <ChevronRight className="h-5 w-5" />
               </button>
+
+              {/* Zoom indicator */}
+              <div className="absolute bottom-3 end-3 bg-background/70 backdrop-blur-sm text-xs text-muted-foreground px-2 py-1 rounded-full">
+                {selectedImageIndex + 1} / {productImagesArray.length}
+              </div>
             </div>
+
+            {/* Thumbnails */}
             <div className="flex gap-3 justify-center">
               {productImagesArray.map((img, idx) => (
-                <button key={idx} onClick={() => setSelectedImageIndex(idx)} className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${selectedImageIndex === idx ? "border-primary" : "border-transparent"}`}>
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImageIndex(idx)}
+                  className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all duration-200 bg-secondary/20 hover:scale-105 ${
+                    selectedImageIndex === idx
+                      ? "border-primary shadow-md scale-105"
+                      : "border-transparent opacity-60 hover:opacity-100"
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt=""
+                    className="w-full h-full object-contain p-2"
+                  />
                 </button>
               ))}
             </div>
