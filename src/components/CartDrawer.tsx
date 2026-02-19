@@ -38,6 +38,14 @@ const CartDrawer = ({ open, onOpenChange }: CartDrawerProps) => {
       toast({ title: t("cartIsEmpty"), description: t("addProductsFirst"), variant: "destructive" });
       return;
     }
+    if (!profile?.phone || profile.phone.trim() === "") {
+      toast({ 
+        title: "Phone Number Required", 
+        description: "⚠️ Please add your phone number in your Profile before placing an order.", 
+        variant: "destructive" 
+      });
+      return;
+    }
     setShowConfirm(true);
   };
 
@@ -46,10 +54,11 @@ const CartDrawer = ({ open, onOpenChange }: CartDrawerProps) => {
     setSubmitting(true);
 
     const shippingAddress = profile?.address || null;
+    const phoneNumber = profile?.phone || null;
 
     const { data: order, error: orderError } = await supabase
       .from("orders")
-      .insert({ user_id: user!.id, total: totalPrice, status: "pending", shipping_address: shippingAddress })
+      .insert({ user_id: user!.id, total: totalPrice, status: "pending", shipping_address: shippingAddress, phone_number: phoneNumber })
       .select()
       .single();
 

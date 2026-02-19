@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useWishlist } from "@/contexts/WishlistContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ProductCardProps {
   id?: string;
@@ -23,11 +25,24 @@ const ProductCard = ({
   id, image, name, rating = 0, reviews = 0, discount, featured = false, price
 }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  const { user } = useAuth();
+
+  const isLiked = id ? isWishlisted(id) : false;
+
+  const handleToggleWishlist = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) {
+      toast({ title: t("pleaseSignIn"), description: t("signInToOrder"), variant: "destructive" });
+      return;
+    }
+    if (!id) return;
+    await toggleWishlist(id);
+  };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -62,7 +77,7 @@ const ProductCard = ({
         <Button
           variant="ghost"
           size="icon"
-          onClick={(e) => { e.stopPropagation(); setIsLiked(!isLiked); }}
+          onClick={handleToggleWishlist}
           className={`absolute ${discount || featured ? 'top-14' : 'top-4'} right-4 z-10 bg-white/90 hover:bg-white backdrop-blur-sm transition-all duration-300 rounded-full shadow-lg ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}
         >
           <Heart className={`h-4 w-4 transition-all ${isLiked ? 'fill-red-500 text-red-500' : 'text-foreground'}`} />

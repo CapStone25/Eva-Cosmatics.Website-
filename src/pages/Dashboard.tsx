@@ -36,6 +36,7 @@ interface Order {
   status: string;
   total: number;
   shipping_address: string | null;
+  phone_number: string | null;
   created_at: string;
 }
 
@@ -366,6 +367,9 @@ const Dashboard = () => {
                             <p className="text-sm text-muted-foreground">
                               {new Date(order.created_at).toLocaleDateString()} • ${order.total.toFixed(2)}
                             </p>
+                            {order.phone_number && (
+                              <p className="text-xs text-muted-foreground mt-1">📞 {order.phone_number}</p>
+                            )}
                             {order.shipping_address && (
                               <p className="text-xs text-muted-foreground mt-1">📍 {order.shipping_address}</p>
                             )}
