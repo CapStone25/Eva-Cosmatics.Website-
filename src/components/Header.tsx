@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, User, ShoppingBag, Globe, Menu, X } from "lucide-react";
+import { Search, User, ShoppingBag, Globe, Menu, X, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -33,6 +34,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { user, isAdmin, signIn, signUp, signInWithGoogle, signInWithFacebook, signInWithTwitter, signOut } = useAuth();
   const { totalItems } = useCart();
+  const { wishlist } = useWishlist();
   const { toast } = useToast();
   const { language, setLanguage, t } = useLanguage();
   const { profile } = useProfile();
@@ -156,6 +158,15 @@ const Header = () => {
               <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary h-9 w-9" onClick={() => setIsSearchOpen(true)}>
                 <Search className="h-[18px] w-[18px]" />
               </Button>
+
+              {user && (
+                <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary relative h-9 w-9" onClick={() => navigate("/wishlist")}>
+                  <Heart className={`h-[18px] w-[18px] ${wishlist.length > 0 ? "fill-primary text-primary" : ""}`} />
+                  {wishlist.length > 0 && (
+                    <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">{wishlist.length}</Badge>
+                  )}
+                </Button>
+              )}
 
               {user ? (
                 <button
@@ -312,12 +323,20 @@ const Header = () => {
                 </button>
               ))}
               {user && (
-                <button
-                  onClick={() => { navigate("/profile"); setIsMobileMenuOpen(false); }}
-                  className="block w-full text-start py-3 px-4 text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
-                >
-                  {t("myProfile")}
-                </button>
+                <>
+                  <button
+                    onClick={() => { navigate("/wishlist"); setIsMobileMenuOpen(false); }}
+                    className="block w-full text-start py-3 px-4 text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
+                  >
+                    ❤️ {t("wishlist")}
+                  </button>
+                  <button
+                    onClick={() => { navigate("/profile"); setIsMobileMenuOpen(false); }}
+                    className="block w-full text-start py-3 px-4 text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
+                  >
+                    {t("myProfile")}
+                  </button>
+                </>
               )}
             </nav>
           </div>

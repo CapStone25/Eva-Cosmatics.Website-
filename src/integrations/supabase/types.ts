@@ -60,6 +60,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          phone_number: string | null
           shipping_address: string | null
           status: string
           total: number
@@ -69,6 +70,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          phone_number?: string | null
           shipping_address?: string | null
           status?: string
           total: number
@@ -78,6 +80,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          phone_number?: string | null
           shipping_address?: string | null
           status?: string
           total?: number
@@ -219,6 +222,35 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      wishlist: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlist_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
