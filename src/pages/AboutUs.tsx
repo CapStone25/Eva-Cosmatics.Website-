@@ -18,12 +18,12 @@ const AboutUs = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-[280px_1fr] gap-12">
-          <aside className="bg-card rounded-2xl p-6 h-fit shadow-card">
-            <nav className="space-y-2">
+      <main className="container mx-auto px-4 py-6 md:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 md:gap-12">
+          <aside className="bg-card rounded-xl md:rounded-2xl p-4 md:p-6 h-fit shadow-card">
+            <nav className="flex md:flex-col gap-1 md:gap-2 overflow-x-auto pb-2 md:pb-0">
               {sections.map((section) => (
-                <button key={section.id} onClick={() => setActiveSection(section.id)} className={`w-full text-start px-4 py-3 rounded-lg transition-all duration-300 font-medium ${activeSection === section.id ? "text-primary bg-primary/10" : "text-foreground/80 hover:text-primary hover:bg-muted"}`}>
+                <button key={section.id} onClick={() => setActiveSection(section.id)} className={`whitespace-nowrap text-start px-3 md:px-4 py-2 md:py-3 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex-shrink-0 md:w-full ${activeSection === section.id ? "text-primary bg-primary/10" : "text-foreground/80 hover:text-primary hover:bg-muted"}`}>
                   {section.label}
                 </button>
               ))}
@@ -32,8 +32,8 @@ const AboutUs = () => {
 
           <div className="animate-fade-in">
             {activeSection === "about" && (
-              <div className="space-y-8">
-                <h1 className="text-4xl font-bold text-foreground">{t("aboutUsTitle")}</h1>
+              <div className="space-y-6 md:space-y-8">
+                <h1 className="text-2xl md:text-4xl font-bold text-foreground">{t("aboutUsTitle")}</h1>
                 <div className="prose prose-lg max-w-none text-muted-foreground">
                   <p className="text-lg leading-relaxed">{t("aboutUsDesc1")}</p>
                   <p className="text-lg leading-relaxed">{t("aboutUsDesc2")}</p>
@@ -44,8 +44,8 @@ const AboutUs = () => {
             )}
 
             {activeSection === "shipping" && (
-              <div className="space-y-8">
-                <h1 className="text-4xl font-bold text-foreground">{t("shipping")}</h1>
+              <div className="space-y-6 md:space-y-8">
+                <h1 className="text-2xl md:text-4xl font-bold text-foreground">{t("shipping")}</h1>
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="domestic" className="border-border">
                     <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{t("domesticShipping")}</AccordionTrigger>
@@ -68,7 +68,7 @@ const AboutUs = () => {
                   </AccordionItem>
                 </Accordion>
 
-                <h1 className="text-4xl font-bold text-foreground pt-8">{t("returns")}</h1>
+                <h1 className="text-2xl md:text-4xl font-bold text-foreground pt-6 md:pt-8">{t("returns")}</h1>
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="policy" className="border-border">
                     <AccordionTrigger className="text-lg font-medium text-foreground hover:text-primary">{t("returnPolicy")}</AccordionTrigger>
@@ -87,8 +87,8 @@ const AboutUs = () => {
             )}
 
             {activeSection === "contact" && (
-              <div className="space-y-8">
-                <h1 className="text-4xl font-bold text-foreground">{t("aboutSideContact")}</h1>
+              <div className="space-y-6 md:space-y-8">
+                <h1 className="text-2xl md:text-4xl font-bold text-foreground">{t("aboutSideContact")}</h1>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div className="space-y-6">
                     <div><h3 className="text-xl font-semibold text-foreground mb-2">{t("email")}</h3><p className="text-muted-foreground">support@evacosmetics.com</p></div>
@@ -108,8 +108,8 @@ const AboutUs = () => {
             )}
 
             {activeSection === "faqs" && (
-              <div className="space-y-8">
-                <h1 className="text-4xl font-bold text-foreground">{t("faqs")}</h1>
+              <div className="space-y-6 md:space-y-8">
+                <h1 className="text-2xl md:text-4xl font-bold text-foreground">{t("faqs")}</h1>
                 <Accordion type="single" collapsible className="w-full">
                   {[
                     { q: t("faqQ1"), a: t("faqA1") },

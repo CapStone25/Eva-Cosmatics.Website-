@@ -60,13 +60,13 @@ const BlogSection = () => {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 items-center bg-gradient-to-r from-secondary/40 to-secondary/20 rounded-3xl p-8 md:p-12 mt-12 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <div className="relative h-64 md:h-80">
-            <img src={skinQuizImage} alt={t("skinQuizTitle")} className="w-full h-full object-cover rounded-2xl" />
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center bg-gradient-to-r from-secondary/40 to-secondary/20 rounded-2xl md:rounded-3xl p-5 md:p-12 mt-8 md:mt-12 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+          <div className="relative h-48 md:h-80">
+            <img src={skinQuizImage} alt={t("skinQuizTitle")} className="w-full h-full object-cover rounded-xl md:rounded-2xl" />
           </div>
           <div className="text-center md:text-start">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">{t("skinQuizTitle")}</h2>
-            <p className="text-muted-foreground mb-6 text-lg">{t("skinQuizDesc")}</p>
+            <h2 className="text-2xl md:text-4xl font-bold text-foreground mb-3 md:mb-4">{t("skinQuizTitle")}</h2>
+            <p className="text-muted-foreground mb-4 md:mb-6 text-base md:text-lg">{t("skinQuizDesc")}</p>
             <Button size="lg" className="px-12" onClick={() => navigate("/best-sellers")}>{t("exploreMore")}</Button>
           </div>
         </div>

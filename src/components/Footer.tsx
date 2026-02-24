@@ -9,10 +9,10 @@ const Footer = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="bg-[hsl(0,0%,15%)] text-white py-12">
+    <footer className="bg-[hsl(0,0%,15%)] text-white py-8 md:py-12">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
-          <div className="md:col-span-1">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-8 mb-8">
+          <div className="col-span-2 md:col-span-1">
             <h3 className="text-xl font-bold mb-4 text-primary cursor-pointer" onClick={() => navigate("/")}>Eva Cosmetics</h3>
             <p className="text-sm text-white/80 mb-3">{t("footerDesc")}</p>
             <p className="text-sm text-white/70 mb-1">📞 +380 50 123 45 67</p>
@@ -46,7 +46,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <h4 className="font-semibold mb-4 text-white/90">{t("signUpEmails")}</h4>
             <p className="text-sm text-white/70 mb-4">{t("newsletterDesc")}</p>
             <div className="flex gap-2">
@@ -70,7 +70,7 @@ const Footer = () => {
                 </a>
               ))}
             </div>
-            <div className="flex gap-6 text-sm text-white/60">
+            <div className="flex flex-wrap justify-center md:justify-end gap-3 md:gap-6 text-xs md:text-sm text-white/60">
               <span>© 2026 Eva Cosmetics</span>
               <button onClick={() => navigate("/about-us")} className="hover:text-primary transition-colors">{t("privacyPolicy")}</button>
               <button onClick={() => navigate("/about-us")} className="hover:text-primary transition-colors">{t("termsConditions")}</button>

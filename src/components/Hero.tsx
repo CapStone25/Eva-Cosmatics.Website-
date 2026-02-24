@@ -8,11 +8,11 @@ const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-secondary/50 to-secondary/30 py-20 md:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-br from-secondary/50 to-secondary/30 py-12 md:py-32">
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className={`space-y-6 text-center ${dir === "rtl" ? "lg:text-right" : "lg:text-left"}`}>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className={`space-y-4 md:space-y-6 text-center ${dir === "rtl" ? "lg:text-right" : "lg:text-left"}`}>
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
               {t("heroTitle")}
               <br />
               <span className="text-foreground/90">{t("heroSubtitle")}</span>

@@ -36,10 +36,10 @@ const Wishlist = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-6 md:py-12">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
-            <Heart className="h-7 w-7 text-primary fill-primary" />
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-6 md:mb-8 flex items-center gap-3">
+            <Heart className="h-6 w-6 md:h-7 md:w-7 text-primary fill-primary" />
             {t("wishlist") || "My Wishlist"}
           </h1>
           {!user ? (

@@ -75,9 +75,9 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">{t("ourBlog")}</h1>
+      <main className="container mx-auto px-4 py-6 md:py-12">
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">{t("ourBlog")}</h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">{t("ourBlogDesc")}</p>
         </div>
 
@@ -107,13 +107,13 @@ const Blog = () => {
         ) : (
           <div className="space-y-8">
             {paginatedPosts.map((post, index) => (
-              <article key={post.id} onClick={() => navigate(`/blog/${post.id}`)} className={`bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-500 animate-fade-in cursor-pointer ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex flex-col md:flex`} style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="md:w-2/5 h-64 md:h-auto overflow-hidden">
+              <article key={post.id} onClick={() => navigate(`/blog/${post.id}`)} className={`bg-card rounded-xl md:rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-500 animate-fade-in cursor-pointer ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex flex-col md:flex`} style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="md:w-2/5 h-48 md:h-auto overflow-hidden">
                   <img src={post.image} alt={post.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
-                <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
-                  <p className="text-sm text-muted-foreground mb-2">{post.date}</p>
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4 hover:text-primary transition-colors">{post.title}</h2>
+                <div className="md:w-3/5 p-4 md:p-8 flex flex-col justify-center">
+                  <p className="text-xs md:text-sm text-muted-foreground mb-2">{post.date}</p>
+                  <h2 className="text-xl md:text-3xl font-bold text-foreground mb-3 md:mb-4 hover:text-primary transition-colors">{post.title}</h2>
                   <p className="text-muted-foreground mb-6 line-clamp-4 leading-relaxed">{post.excerpt}</p>
                   <div className="flex flex-wrap gap-2 mb-6">
                     {post.tags.map((tag) => (

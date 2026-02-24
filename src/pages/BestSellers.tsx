@@ -84,22 +84,22 @@ const BestSellers = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row gap-8">
+      <main className="container mx-auto px-4 py-4 md:py-8">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8">
           {/* Filters Sidebar */}
-          <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
-            <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
-              <nav className="space-y-3">
+          <aside className="w-full md:w-64 flex-shrink-0 space-y-4 md:space-y-6">
+            <div className="bg-card rounded-lg p-4 md:p-6 shadow-sm border border-border">
+              <nav className="flex md:flex-col gap-2 md:gap-3 overflow-x-auto pb-1 md:pb-0">
                 {categories.map((cat) => (
-                  <button key={cat.key} className="block w-full text-start text-sm text-foreground/80 hover:text-primary transition-colors">
+                  <button key={cat.key} className="whitespace-nowrap text-start text-sm text-foreground/80 hover:text-primary transition-colors flex-shrink-0 md:w-full">
                     {cat.label}
                   </button>
                 ))}
               </nav>
             </div>
 
-            <div className="bg-card rounded-lg p-6 shadow-sm border border-border space-y-6">
-              <h3 className="font-bold text-lg">{t("filters")}</h3>
+            <div className="bg-card rounded-lg p-4 md:p-6 shadow-sm border border-border space-y-4 md:space-y-6">
+              <h3 className="font-bold text-base md:text-lg">{t("filters")}</h3>
               <div><h4 className="font-semibold text-sm mb-3">{t("productType")}</h4></div>
               <div><h4 className="font-semibold text-sm mb-3">{t("ingredientType")}</h4></div>
               <div>

@@ -93,8 +93,8 @@ const ProductCard = ({
           </div>
         </div>
 
-        <div className="p-5 space-y-3 bg-gradient-to-br from-white to-secondary/20">
-          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 min-h-[3rem] text-sm leading-relaxed">
+        <div className="p-3 md:p-5 space-y-2 md:space-y-3 bg-gradient-to-br from-white to-secondary/20">
+          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 min-h-[2.5rem] md:min-h-[3rem] text-xs md:text-sm leading-relaxed">
             {name}
           </h3>
           {rating > 0 && (
@@ -107,7 +107,7 @@ const ProductCard = ({
           )}
           {price && (
             <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-primary">{price}</span>
+              <span className="text-lg md:text-xl font-bold text-primary">{price}</span>
               {discount && (
                 <span className="text-sm text-muted-foreground line-through">
                   ${(parseFloat(price.replace('$', '')) / (1 - discount / 100)).toFixed(0)}

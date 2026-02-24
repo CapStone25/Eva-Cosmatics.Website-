@@ -52,7 +52,10 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changingPassword, setChangingPassword] = useState(false);
-  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(() => {
+    const saved = localStorage.getItem("emailNotifications");
+    return saved !== null ? JSON.parse(saved) : true;
+  });
 
   useEffect(() => {
     if (!loading && !user) navigate("/");
@@ -186,14 +189,14 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-6 md:py-12">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div className="flex items-center gap-3 md:gap-4">
               <div className="relative group">
-                <Avatar className="h-16 w-16 border-2 border-primary">
+                <Avatar className="h-12 w-12 md:h-16 md:w-16 border-2 border-primary">
                   <AvatarImage src={profile.avatar_url || undefined} alt={firstName} />
-                  <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-base md:text-lg">
                     {firstName.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
@@ -213,35 +216,35 @@ const Profile = () => {
                 />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-foreground">{t("myProfile")}</h1>
-                <p className="text-muted-foreground">{isAdmin ? t("admin") : t("member")}</p>
+                <h1 className="text-2xl md:text-4xl font-bold text-foreground">{t("myProfile")}</h1>
+                <p className="text-sm md:text-base text-muted-foreground">{isAdmin ? t("admin") : t("member")}</p>
               </div>
             </div>
-            <Button variant="outline" onClick={handleSignOut} className="gap-2">
+            <Button variant="outline" onClick={handleSignOut} className="gap-2 w-full sm:w-auto">
               <LogOut className="h-4 w-4" />
               {t("signOut")}
             </Button>
           </div>
 
           <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
-              <TabsTrigger value="profile" className="gap-2">
-                <User className="h-4 w-4" />
+            <TabsList className="grid w-full grid-cols-3 mb-6 md:mb-8">
+              <TabsTrigger value="profile" className="gap-1 md:gap-2 text-xs md:text-sm">
+                <User className="h-3.5 w-3.5 md:h-4 md:w-4" />
                 {t("profile")}
               </TabsTrigger>
-              <TabsTrigger value="orders" className="gap-2">
-                <Package className="h-4 w-4" />
+              <TabsTrigger value="orders" className="gap-1 md:gap-2 text-xs md:text-sm">
+                <Package className="h-3.5 w-3.5 md:h-4 md:w-4" />
                 {t("orders")}
               </TabsTrigger>
-              <TabsTrigger value="settings" className="gap-2">
-                <Settings className="h-4 w-4" />
+              <TabsTrigger value="settings" className="gap-1 md:gap-2 text-xs md:text-sm">
+                <Settings className="h-3.5 w-3.5 md:h-4 md:w-4" />
                 {t("settings")}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="profile" className="space-y-6">
-              <div className="bg-card rounded-2xl p-8 shadow-card">
-                <h2 className="text-2xl font-semibold text-foreground mb-6">{t("personalInfo")}</h2>
+              <div className="bg-card rounded-xl md:rounded-2xl p-4 md:p-8 shadow-card">
+                <h2 className="text-lg md:text-2xl font-semibold text-foreground mb-4 md:mb-6">{t("personalInfo")}</h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">{t("fullName")}</Label>
@@ -267,8 +270,8 @@ const Profile = () => {
             </TabsContent>
 
             <TabsContent value="orders" className="space-y-6">
-              <div className="bg-card rounded-2xl p-8 shadow-card">
-                <h2 className="text-2xl font-semibold text-foreground mb-6">{t("orderHistory")}</h2>
+              <div className="bg-card rounded-xl md:rounded-2xl p-4 md:p-8 shadow-card">
+                <h2 className="text-lg md:text-2xl font-semibold text-foreground mb-4 md:mb-6">{t("orderHistory")}</h2>
                 {orders.length === 0 ? (
                   <div className="text-center py-12">
                     <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
@@ -276,15 +279,15 @@ const Profile = () => {
                     <Button onClick={() => navigate("/best-sellers")} className="mt-4">{t("startShopping")}</Button>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 md:space-y-4">
                     {orders.map((order) => (
-                      <div key={order.id} className="flex items-center justify-between p-4 bg-muted rounded-xl">
-                        <div>
-                          <p className="font-medium text-foreground">Order #{order.id.slice(0, 8)}</p>
-                          <p className="text-sm text-muted-foreground">{new Date(order.created_at).toLocaleDateString()}</p>
+                      <div key={order.id} className="flex items-center justify-between gap-3 p-3 md:p-4 bg-muted rounded-xl">
+                        <div className="min-w-0">
+                          <p className="font-medium text-foreground text-sm md:text-base">Order #{order.id.slice(0, 8)}</p>
+                          <p className="text-xs md:text-sm text-muted-foreground">{new Date(order.created_at).toLocaleDateString()}</p>
                         </div>
-                        <div className="text-right">
-                          <p className="font-semibold text-foreground">${order.total.toFixed(2)}</p>
+                        <div className="text-right flex-shrink-0">
+                          <p className="font-semibold text-foreground text-sm md:text-base">${order.total.toFixed(2)}</p>
                           <span className={`text-xs px-2 py-1 rounded-full ${
                             order.status === "completed" ? "bg-green-100 text-green-700"
                             : order.status === "pending" ? "bg-yellow-100 text-yellow-700"
@@ -299,28 +302,35 @@ const Profile = () => {
             </TabsContent>
 
             <TabsContent value="settings" className="space-y-6">
-              <div className="bg-card rounded-2xl p-8 shadow-card">
-                <h2 className="text-2xl font-semibold text-foreground mb-6">{t("accountSettings")}</h2>
+              <div className="bg-card rounded-xl md:rounded-2xl p-4 md:p-8 shadow-card">
+                <h2 className="text-lg md:text-2xl font-semibold text-foreground mb-4 md:mb-6">{t("accountSettings")}</h2>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-muted rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <Bell className="h-5 w-5 text-primary" />
-                      <div>
-                        <p className="font-medium text-foreground">{t("emailNotifications")}</p>
-                        <p className="text-sm text-muted-foreground">{t("receiveUpdates")}</p>
+                  <div className="flex items-center justify-between gap-3 p-3 md:p-4 bg-muted rounded-xl">
+                    <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                      <Bell className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="font-medium text-foreground text-sm md:text-base">{t("emailNotifications")}</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">{t("receiveUpdates")}</p>
                       </div>
                     </div>
                     <Switch
                       checked={emailNotifications}
-                      onCheckedChange={setEmailNotifications}
+                      onCheckedChange={(checked) => {
+                        setEmailNotifications(checked);
+                        localStorage.setItem("emailNotifications", JSON.stringify(checked));
+                        toast({
+                          title: t("success"),
+                          description: checked ? "Notifications enabled" : "Notifications disabled",
+                        });
+                      }}
                     />
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-muted rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <Lock className="h-5 w-5 text-primary" />
-                      <div>
-                        <p className="font-medium text-foreground">{t("password")}</p>
-                        <p className="text-sm text-muted-foreground">{t("changePassword")}</p>
+                  <div className="flex items-center justify-between gap-3 p-3 md:p-4 bg-muted rounded-xl">
+                    <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                      <Lock className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="font-medium text-foreground text-sm md:text-base">{t("password")}</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">{t("changePassword")}</p>
                       </div>
                     </div>
                     <Button variant="outline" size="sm" onClick={() => setPasswordDialogOpen(true)}>{t("update")}</Button>

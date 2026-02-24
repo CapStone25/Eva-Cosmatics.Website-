@@ -105,14 +105,14 @@ const BlogArticle = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
         <Button variant="ghost" onClick={() => navigate("/blog")} className="mb-6 gap-2">
           <ChevronLeft className="h-4 w-4" />
           {t("onTheBlog")}
         </Button>
 
         <article className="animate-fade-in">
-          <div className="relative h-64 md:h-96 rounded-2xl overflow-hidden mb-8">
+          <div className="relative h-48 md:h-96 rounded-xl md:rounded-2xl overflow-hidden mb-6 md:mb-8">
             <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
           </div>
 
@@ -125,7 +125,7 @@ const BlogArticle = () => {
           </div>
 
           <p className="text-sm text-muted-foreground mb-2">{post.date}</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6">{post.title}</h1>
+          <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-4 md:mb-6">{post.title}</h1>
 
           <div className="prose prose-lg max-w-none space-y-6">
             {post.content.map((paragraph, idx) => (

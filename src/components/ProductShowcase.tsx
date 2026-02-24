@@ -31,7 +31,7 @@ const ProductShowcase = () => {
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
       
-      <div className="container mx-auto px-4 space-y-24 md:space-y-32 relative z-10">
+      <div className="container mx-auto px-4 space-y-16 md:space-y-32 relative z-10">
         {showcases.map((showcase, index) => (
           <div
             key={index}
@@ -40,16 +40,16 @@ const ProductShowcase = () => {
           >
             {showcase.imagePosition === "left" && (
               <div className="relative overflow-hidden rounded-3xl group shadow-card hover:shadow-hover transition-all duration-700">
-                <img src={showcase.imageUrl} alt={showcase.title} className="w-full h-[400px] md:h-[550px] object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <img src={showcase.imageUrl} alt={showcase.title} className="w-full h-[250px] md:h-[550px] object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               </div>
             )}
 
-            <div className={`space-y-6 ${showcase.imagePosition === "left" ? "md:order-last" : ""}`}>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+            <div className={`space-y-4 md:space-y-6 ${showcase.imagePosition === "left" ? "md:order-last" : ""}`}>
+              <h2 className="text-2xl md:text-5xl font-bold text-foreground leading-tight">
                 {showcase.title}
               </h2>
-              <p className="text-muted-foreground leading-relaxed text-lg">
+              <p className="text-muted-foreground leading-relaxed text-base md:text-lg">
                 {showcase.description}
               </p>
               <div className="flex flex-wrap gap-3">
@@ -80,8 +80,8 @@ const ProductShowcase = () => {
             </div>
 
             {showcase.imagePosition === "right" && (
-              <div className="relative overflow-hidden rounded-3xl group shadow-card hover:shadow-hover transition-all duration-700">
-                <img src={showcase.imageUrl} alt={showcase.title} className="w-full h-[400px] md:h-[550px] object-cover transition-transform duration-1000 group-hover:scale-110" />
+              <div className="relative overflow-hidden rounded-2xl md:rounded-3xl group shadow-card hover:shadow-hover transition-all duration-700">
+                <img src={showcase.imageUrl} alt={showcase.title} className="w-full h-[250px] md:h-[550px] object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               </div>
             )}

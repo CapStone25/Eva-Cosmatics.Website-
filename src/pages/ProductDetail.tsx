@@ -121,8 +121,8 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
+      <main className="container mx-auto px-4 py-6 md:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 mb-12 md:mb-20">
           {/* Image Gallery */}
           <div className="space-y-4 lg:sticky lg:top-8 self-start">
             {/* Main Image */}
@@ -256,9 +256,9 @@ const ProductDetail = () => {
         </div>
 
         {/* Reviews Section */}
-        <section className="border-t border-border pt-12">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold">{t("customerReviews")} ({reviews.length})</h2>
+        <section className="border-t border-border pt-8 md:pt-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 md:mb-8">
+            <h2 className="text-xl md:text-2xl font-bold">{t("customerReviews")} ({reviews.length})</h2>
             <Dialog open={isReviewDialogOpen} onOpenChange={setIsReviewDialogOpen}>
               <DialogTrigger asChild><Button>{t("writeReview")}</Button></DialogTrigger>
               <DialogContent>
