@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import heroProducts from "@/assets/hero-products.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
+
+const heroProducts = "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&auto=format&fit=crop";
 
 const Hero = () => {
   const { t, dir } = useLanguage();

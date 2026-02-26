@@ -1,12 +1,13 @@
-import productSerum from "@/assets/product-serum.png";
-import productRecipe from "@/assets/product-recipe.png";
-import productConditioner from "@/assets/product-conditioner.png";
-import productLotion from "@/assets/product-lotion.png";
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
-import product4 from "@/assets/product-4.jpg";
 import type { Language } from "@/contexts/LanguageContext";
+
+const productSerum = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&auto=format&fit=crop";
+const productRecipe = "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&auto=format&fit=crop";
+const productConditioner = "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=400&auto=format&fit=crop";
+const productLotion = "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=400&auto=format&fit=crop";
+const product1 = "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&auto=format&fit=crop";
+const product2 = "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&auto=format&fit=crop";
+const product3 = "https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=400&auto=format&fit=crop";
+const product4 = "https://images.unsplash.com/photo-1614859324967-bdf0e4831013?w=400&auto=format&fit=crop";
 
 export const productImageMap: Record<string, string> = {
   "product-serum.png": productSerum,

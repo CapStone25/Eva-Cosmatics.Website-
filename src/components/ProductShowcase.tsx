@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import showcase1 from "@/assets/showcase-1.jpg";
-import showcase2 from "@/assets/showcase-2.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
+
+const showcase1 = "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&auto=format&fit=crop";
+const showcase2 = "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=800&auto=format&fit=crop";
 
 const ProductShowcase = () => {
   const { t } = useLanguage();

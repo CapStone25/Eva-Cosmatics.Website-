@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import skinQuizImage from "@/assets/skin-quiz.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
+
+const skinQuizImage = "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop";
 
 const BlogSection = () => {
   const { t } = useLanguage();
