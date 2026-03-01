@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, User, ShoppingBag, Globe, Menu, X, Heart, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -362,7 +362,7 @@ const Header = () => {
               src="https://agent.jotform.com/019c893bb3c87e3d9efb48ff900c1ebe8771"
               title="JotForm Agent"
               className="w-full h-full border-0 rounded-lg"
-              allowFullScreen
+              allow="fullscreen"
             />
           </div>
         </DialogContent>
