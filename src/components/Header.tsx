@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, User, ShoppingBag, Globe, Menu, X, Heart } from "lucide-react";
+import { Search, User, ShoppingBag, Globe, Menu, X, Heart, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -51,11 +51,25 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isJotFormOpen, setIsJotFormOpen] = useState(false);
   const [authTab, setAuthTab] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Load JotForm agent script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://agent.jotform.com/019c893bb3c87e3d9efb48ff900c1ebe8771";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -154,6 +168,11 @@ const Header = () => {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              {/* JotForm Agent Button */}
+              <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary h-9 w-9" onClick={() => setIsJotFormOpen(true)}>
+                <MessageSquare className="h-[18px] w-[18px]" />
+              </Button>
 
               <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-primary h-9 w-9" onClick={() => setIsSearchOpen(true)}>
                 <Search className="h-[18px] w-[18px]" />
@@ -342,6 +361,23 @@ const Header = () => {
           </div>
         )}
       </header>
+      {/* JotForm Agent Dialog */}
+      <Dialog open={isJotFormOpen} onOpenChange={setIsJotFormOpen}>
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{t("contactUs") || "Contact Us"}</DialogTitle>
+            <DialogDescription>Get in touch with our team using the form below</DialogDescription>
+          </DialogHeader>
+          <div className="w-full">
+            <iframe 
+              src="https://agent.jotform.com/019c893bb3c87e3d9efb48ff900c1ebe8771"
+              title="JotForm Agent"
+              className="w-full h-[500px] border-0 rounded-lg"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
       <CartDrawer open={isCartOpen} onOpenChange={setIsCartOpen} />
     </>
