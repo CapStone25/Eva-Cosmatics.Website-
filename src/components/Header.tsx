@@ -58,18 +58,7 @@ const Header = () => {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Load JotForm agent script
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://agent.jotform.com/019c893bb3c87e3d9efb48ff900c1ebe8771";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
+
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -368,11 +357,12 @@ const Header = () => {
             <DialogTitle>{t("contactUs") || "Contact Us"}</DialogTitle>
             <DialogDescription>Get in touch with our team using the form below</DialogDescription>
           </DialogHeader>
-          <div className="w-full">
+          <div className="w-full h-[500px]">
             <iframe 
               src="https://agent.jotform.com/019c893bb3c87e3d9efb48ff900c1ebe8771"
               title="JotForm Agent"
-              className="w-full h-[500px] border-0 rounded-lg"
+              className="w-full h-full border-0 rounded-lg"
+              allowFullScreen
             />
           </div>
         </DialogContent>
